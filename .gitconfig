@@ -1,0 +1,7 @@
+[user]
+	email = saviogl@gmail.com
+	name = Savio Lucena
+[core]
+	editor = vim
+[diff "sopsdiffer"]
+	textconv = sops -d
