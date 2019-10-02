@@ -26,5 +26,11 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
+# include .thinkific if it exists
+if [ -f "$HOME/.thinkific" ]; then
+    . "$HOME/.thinkific"
+fi
+
 if [ -t 0 ] && [[ -z $TMUX ]] && [[ $- = *i* ]]; then exec tmux; fi
 
+source $HOME/.rvm/scripts/rvm

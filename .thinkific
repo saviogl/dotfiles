@@ -1,0 +1,8 @@
+###
+# Thinkific Specific Configuration
+###
+export THINKIFICPATH=$HOME/Development/Thinkific
+
+thnk() {
+  cd $THINKIFICPATH;
+}
