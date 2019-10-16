@@ -34,3 +34,5 @@ fi
 if [ -t 0 ] && [[ -z $TMUX ]] && [[ $- = *i* ]]; then exec tmux; fi
 
 source $HOME/.rvm/scripts/rvm
+
+export PATH=$PATH:/usr/local/go/bin
