@@ -27,8 +27,8 @@ if [ -d "$HOME/.local/bin" ] ; then
 fi
 
 # include .thinkific if it exists
-if [ -f "$HOME/.thinkific" ]; then
-    . "$HOME/.thinkific"
+if [ -f "$HOME/.dotfiles/.thinkific" ]; then
+    . "$HOME/.dotfiles/.thinkific"
 fi
 
 if [ -t 0 ] && [[ -z $TMUX ]] && [[ $- = *i* ]]; then exec tmux; fi
