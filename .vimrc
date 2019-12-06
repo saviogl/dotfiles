@@ -32,14 +32,13 @@ set expandtab
 " Set the window's title, reflecting the file currently being edited
 " set title
 " Configure clipboard for copy&paster operation
-if has('clipboard')
-  if has('unnamedplus')  " When possible use + register for copy-paste
-    set clipboard=unnamed,unnamedplus
-  else
-    set clipboard=unnamed
-  endif
-endif
-      
+" if has('clipboard')
+" if has('unnamedplus')  " When possible use + register for copy-paste
+"   set clipboard=unnamed,unnamedplus
+" else
+"   set clipboard=unnamed
+" endif
+" endif
 
 """" CtrlP
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
@@ -69,4 +68,8 @@ endif
 " -----------------------------------------------
 "
 
-:nmap cp :let @+ = expand("%")<cr>
+nnoremap <F2> :set invpaste paste?<CR>
+set pastetoggle=<F2>
+set showmode
+
+:nmap cp :let @+=@%

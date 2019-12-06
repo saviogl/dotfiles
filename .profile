@@ -35,4 +35,6 @@ if [ -t 0 ] && [[ -z $TMUX ]] && [[ $- = *i* ]]; then exec tmux; fi
 
 source $HOME/.rvm/scripts/rvm
 
-export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:/usr/local/go/bin:/$HOME/go/bin
+
+export KUBECONFIG=~/.kube/merge.config:~/.kube/config:~/.kube/microk8s.config
