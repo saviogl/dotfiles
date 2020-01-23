@@ -34,6 +34,8 @@
 	plos = pull origin staging
 	plom = pull origin master
 	ploh = pull origin HEAD
+  plb = "!git branch -vv | grep 'origin/.*: gone]' | awk '{print $1}' | xargs git branch -d"
+  rpo = remote prune origin
 	unstage = reset --soft HEAD^
 	ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
 	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat

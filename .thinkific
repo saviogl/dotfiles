@@ -2,6 +2,7 @@
 # Thinkific Specific Configuration
 ###
 export THINKIFICPATH=$HOME/Development/Thinkific
+export NPM_TOKEN=REDACTED_TOKEN
 
 thnk() {
   cd $THINKIFICPATH;
