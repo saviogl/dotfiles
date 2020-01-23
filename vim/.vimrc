@@ -23,28 +23,6 @@ execute printf('source %s', '$HOME/.dotfiles/vim/general.vim')
 execute printf('source %s', '$HOME/.dotfiles/vim/terminal.vim')
 execute printf('source %s', '$HOME/.dotfiles/vim/git.vim')
 execute printf('source %s', '$HOME/.dotfiles/vim/syntax.vim')
-"
-"""" Options
-"
-"" Set line numbers
-"set number
-"" Indent using 2 spaces
-"set tabstop=2
-"" When shifiting, indent using 2 spaces
-"set shiftwidth=2
-"" Convert tabs to space
-"set expandtab
-"" Set the window's title, reflecting the file currently being edited
-"" set title
-"" Configure clipboard for copy&paster operation
-"" if has('clipboard')
-"" if has('unnamedplus')  " When possible use + register for copy-paste
-""   set clipboard=unnamed,unnamedplus
-"" else
-""   set clipboard=unnamed
-"" endif
-"" endif
-"
 """"" CtrlP
 "" Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 "if executable('ag')
@@ -67,17 +45,6 @@ execute printf('source %s', '$HOME/.dotfiles/vim/syntax.vim')
 "if executable('ag')
 "  let g:ackprg = 'ag --vimgrep'
 "endif
-"
-"" -----------------------------------------------
-"" Key Mapping
-"" -----------------------------------------------
-""
-"
-"nnoremap <F2> :set invpaste paste?<CR>
-"set pastetoggle=<F2>
-"set showmode
-"
-":nmap cp :let @+=@%
 "
 
 " Install plugins

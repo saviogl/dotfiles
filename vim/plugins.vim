@@ -5,7 +5,6 @@ Plug 'tpope/vim-sensible'
 " ctrlp.vim - https://github.com/ctrlpvim/ctrlp.vim
 Plug 'ctrlpvim/ctrlp.vim'
 
-"Plug 'hashivim/vim-terraform' " Terraform formatting, highlighting - https://github.com/hashivim/vim-terraform
 " Linting
 Plug 'dense-analysis/ale' " Asynchronous Linting - https://github.com/dense-analysis/ale/blob/master/supported-tools.md
 
@@ -14,6 +13,7 @@ Plug 'tpope/vim-fugitive'     " Git commands in vim - https://github.com/tpope/v
 Plug 'airblade/vim-gitgutter' " Shows a git diff in the gutter - https://github.com/airblade/vim-gitgutter
 
 " Misc
+Plug 'vim-airline/vim-airline' 	    " Improved Status Bar - https://github.com/vim-airline/vim-airline
 Plug 'preservim/nerdtree'           " Tree explorer
 Plug 'Xuyuanp/nerdtree-git-plugin'  " Git status highlighting for NERDTree
 Plug 'google/vim-searchindex'       " Display number of search matches & index of a current match
