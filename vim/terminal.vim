@@ -3,7 +3,7 @@
 " => Mappings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " <C-t> to open a new terminal tab
-nnoremap <C-t> :tabnew<CR>:term<CR>
+nnoremap <C-t> :term<CR>
 
 " <esc> to get back into normal mode
 " tnoremap <esc> <C-\><C-n>

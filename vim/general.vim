@@ -11,6 +11,18 @@ nnoremap <C-b> :NERDTreeFind<CR>
 let NERDTreeShowLineNumbers=1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => FZF
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap <silent> <C-p> :FZF<CR>
+nnoremap <silent> <leader>v :Buffers<CR>
+nnoremap <silent> <leader>r :History<CR>
+nnoremap <silent> <leader>: :History:<CR>
+nnoremap <silent> <leader>/ :History/<CR>
+nnoremap <silent> <leader>f :Rg<CR>
+nnoremap <silent> <C-f> :Rg <c-r><c-w><CR>
+"vnoremap <C-f> "xy:Ag <c-r>x
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Mappings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Smart way to move between windows
@@ -23,8 +35,8 @@ nnoremap <C-l> <C-W>l
 map <leader>to :tabnew<cr>
 map <leader>tx :tabclose<cr>
 map <leader>tm :tabmove
-map <C-M-l> :tabnext<cr>
-map <C-M-h> :tabprevious<cr>
+noremap <C-Right> :tabnext<cr>
+noremap <C-Left> :tabprevious<cr>
 map <leader>t1 :tabnext1<cr>
 map <leader>t2 :tabnext2<cr>
 map <leader>t3 :tabnext3<cr>
@@ -36,9 +48,9 @@ map <leader>t8 :tabnext8<cr>
 map <leader>t9 :tabnext9<cr>
 
 " Let 'tt' toggle between this and the last accessed tab
-" let g:lasttab = 1
-" nmap <silent> <Leader>tt :exe "tabn ".g:lasttab<CR>
-" autocmd TabLeave * let g:lasttab = tabpagenr()
+let g:lasttab = 1
+nmap <silent> <Leader>tt :exe "tabn ".g:lasttab<CR>
+autocmd TabLeave * let g:lasttab = tabpagenr()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Misc
@@ -46,6 +58,9 @@ map <leader>t9 :tabnext9<cr>
 " Set the default split to be vertical
 set splitbelow
 set splitright
+
+" Return to last edit position when opening files (You want this!)
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exec "normal! g'\"" | endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""" SHORTCUTS """""""""""""""""""""""""""
