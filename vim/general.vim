@@ -1,5 +1,5 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""""""""""""""""""" NAVIGATION """"""""""""""""""""""""""
+"""""""""""""""""""" NAVIGATION Mappings"""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -23,7 +23,22 @@ nnoremap <silent> <C-f> :Rg <c-r><c-w><CR>
 "vnoremap <C-f> "xy:Ag <c-r>x
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Mappings
+" => MarkdownPreview
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <C-x> <Plug>MarkdownPreviewToggle
+"nmap <M-s> <Plug>MarkdownPreviewStop
+"nmap <C-p> <Plug>MarkdownPreviewToggle
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""" SHORTCUTS """""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Fast saving
+nmap <leader>w :w!<cr>
+" Fast closing
+nmap <leader>q :q<cr>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Panes/Tabs
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Smart way to move between windows
 nnoremap <C-j> <C-W>j
@@ -52,42 +67,33 @@ let g:lasttab = 1
 nmap <silent> <Leader>tt :exe "tabn ".g:lasttab<CR>
 autocmd TabLeave * let g:lasttab = tabpagenr()
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Misc
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Set the default split to be vertical
-set splitbelow
-set splitright
 
 " Return to last edit position when opening files (You want this!)
 autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exec "normal! g'\"" | endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""""""""""""""""""" SHORTCUTS """""""""""""""""""""""""""
+""""""""""""""""""""""""" Settings """"""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Mappings
+" => MarkdownPreview
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Fast saving
-nmap <leader>w :w!<cr>
-" Fast closing
-nmap <leader>q :q<cr>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""""""""""""""""""" APPEARENCE """"""""""""""""""""""""""
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Set line numbers
-set number
-" Indent using 2 spaces
-set tabstop=2
-" When shifiting, indent using 2 spaces
-set shiftwidth=2
-" Convert tabs to space
-set expandtab
+let g:mkdp_auto_close = 0
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Misc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Don't create *.swo or *.swp files
-set noswapfile
+set splitbelow " Horizontal windows should split to bottom
+set splitright " Vertical windows should be split to right
+set number " Set line numbers
+set tabstop=2 " Indent using 2 spaces
+set shiftwidth=2 " When shifiting, indent using 2 spaces
+set expandtab " Convert tabs to space
+set noswapfile " Don't use swapfile
+set nobackup " Don't create annoying backup files
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""" FILETYPES """""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+augroup filetype
+  "au BufNewFile,BufRead *.tf set filetype=terraform
+augroup END

@@ -1,15 +1,19 @@
+" Vim Sensible - https://github.com/tpope/vim-sensible
+Plug 'tpope/vim-sensible'
+
 " Linting
 Plug 'dense-analysis/ale' " Asynchronous Linting - https://github.com/dense-analysis/ale/blob/master/supported-tools.md
+
 " Syntax
 Plug 'tpope/vim-rails'
 Plug 'fatih/vim-go'
 Plug 'cespare/vim-toml'
 Plug 'google/vim-jsonnet'
+Plug 'hashivim/vim-terraform' "This plugin adds a :Terraform command that runs terraform, with tab completion of subcommands. It also sets up *.tf, *.tfvars, and *.tfstate files to be highlighted as HCL, HCL, and JSON respectively.
+Plug 'tsandall/vim-rego'
 
 Plug 'tpope/vim-surround' " Quoting/parenthesizing made simple - https://github.com/tpope/vim-surround
 
-" Vim Sensible - https://github.com/tpope/vim-sensible
-Plug 'tpope/vim-sensible'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
@@ -27,3 +31,9 @@ Plug 'aserebryakov/vim-todo-lists'  " Vim plugin for TODO lists management.
 
 " vim-ack - https://github.com/mileszs/ack.vim
 Plug 'mileszs/ack.vim'
+
+" tabular - https://github.com/godlygeek/tabular
+Plug 'godlygeek/tabular'
+
+" markdown-preview - https://github.com/iamcco/markdown-preview.nvim
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }

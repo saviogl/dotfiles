@@ -1,5 +1,5 @@
 " Must be at the top to make sure it work everywhere
-let mapleader = ','
+let mapleader   = ','
 let g:mapleader = ','
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

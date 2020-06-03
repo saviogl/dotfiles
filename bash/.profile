@@ -27,8 +27,13 @@ if [ -d "$HOME/.local/bin" ] ; then
 fi
 
 # include .thinkific if it exists
-if [ -f "$HOME/.dotfiles/.thinkific" ]; then
-    . "$HOME/.dotfiles/.thinkific"
+if [ -f "$HOME/.dotfiles/bash/thinkific" ]; then
+    . "$HOME/.dotfiles/bash/thinkific"
+fi
+
+# include .helpers if it exists
+if [ -f "$HOME/.dotfiles/bash/helpers" ]; then
+    . "$HOME/.dotfiles/bash/helpers"
 fi
 
 if [ -t 0 ] && [[ -z $TMUX ]] && [[ $- = *i* ]]; then exec tmux; fi
@@ -36,5 +41,10 @@ if [ -t 0 ] && [[ -z $TMUX ]] && [[ $- = *i* ]]; then exec tmux; fi
 source $HOME/.rvm/scripts/rvm
 
 export PATH=$PATH:/usr/local/go/bin:/$HOME/go/bin
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
-export KUBECONFIG=~/.kube/merge.config:~/.kube/config:~/.kube/microk8s.config
+export KUBECONFIG=~/.kube/merge.config:~/.kube/config:~/.kube/home
+
+eval "$(starship init bash)"
+eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+export PATH="/home/linuxbrew/.linuxbrew/opt/awscli@1/bin:$PATH"

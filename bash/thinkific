@@ -1,0 +1,20 @@
+#!/bin/bash
+
+###
+# Thinkific Specific Configuration
+###
+export THINKIFICPATH=$HOME/Development/Thinkific
+export NPM_TOKEN=REDACTED_TOKEN
+
+thnk() {
+  cd "$THINKIFICPATH" || return;
+}
+
+ecr-login() {
+  aws --profile "$1" ecr get-login-password | docker login --username AWS --password-stdin \
+  "$(aws --profile think-new sts get-caller-identity | jq -r '.Account')".dkr.ecr
+}
+
+k8s-config() {
+  aws --profile "$1" eks update-kubeconfig --name "$2" --alias "$2"
+}

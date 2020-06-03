@@ -23,6 +23,7 @@
 	staging = !git checkout staging && git pull origin staging
 	master = !git checkout master && git pull origin
 	po = push origin
+  puo = "!git push origin -u $(git symbolic-ref --short HEAD)"
 	pod = push origin dev
 	pos = push origin staging
 	pom = push origin master
