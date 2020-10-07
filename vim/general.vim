@@ -36,6 +36,9 @@ nmap <C-x> <Plug>MarkdownPreviewToggle
 nmap <leader>w :w!<cr>
 " Fast closing
 nmap <leader>q :q<cr>
+" Copy Filename to GNOME Clipboard
+nmap <leader>cs :let @+=expand("%")<CR>
+nmap <leader>cl :let @+=expand("%:p")<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Panes/Tabs

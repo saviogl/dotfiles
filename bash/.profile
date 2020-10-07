@@ -40,11 +40,16 @@ if [ -t 0 ] && [[ -z $TMUX ]] && [[ $- = *i* ]]; then exec tmux; fi
 
 source $HOME/.rvm/scripts/rvm
 
-export PATH=$PATH:/usr/local/go/bin:/$HOME/go/bin
+export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
+export PATH=$PATH:/home/saviolucena/.local/bin
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 export KUBECONFIG=~/.kube/merge.config:~/.kube/config:~/.kube/home
 
-eval "$(starship init bash)"
-eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+if [ -f "$HOME/bin/starship" ]; then
+  eval "$(starship init bash)"
+fi
+if [ -f "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+  eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+fi
 export PATH="/home/linuxbrew/.linuxbrew/opt/awscli@1/bin:$PATH"
