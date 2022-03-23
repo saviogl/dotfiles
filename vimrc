@@ -15,14 +15,14 @@ endif
 """ Plugins Start
 call plug#begin('~/.vim/plugged')
 " Source plugins.vim and install plugins
-execute printf('source %s', '$HOME/.dotfiles/vim/plugins.vim')
+execute printf('source %s', '$HOME/.vim/plugins.vim')
 call plug#end()
 """ Plugins End
 
-execute printf('source %s', '$HOME/.dotfiles/vim/general.vim')
-execute printf('source %s', '$HOME/.dotfiles/vim/terminal.vim')
-execute printf('source %s', '$HOME/.dotfiles/vim/git.vim')
-execute printf('source %s', '$HOME/.dotfiles/vim/syntax.vim')
+execute printf('source %s', '$HOME/.vim/general.vim')
+execute printf('source %s', '$HOME/.vim/terminal.vim')
+execute printf('source %s', '$HOME/.vim/git.vim')
+execute printf('source %s', '$HOME/.vim/syntax.vim')
 
 " Quickly open/reload vim
 nnoremap <leader>ev :vsplit $MYVIMRC<CR>

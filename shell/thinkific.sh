@@ -1,15 +1,3 @@
-#!/bin/bash
-
-###
-# Thinkific Specific Configuration
-###
-export THINKIFICPATH=$HOME/Development/Thinkific
-export NPM_TOKEN=REDACTED_TOKEN
-
-thnk() {
-  cd "$THINKIFICPATH" || return;
-}
-
 ecr-login() {
   aws --profile "$1" ecr get-login --no-include-email | bash
 # aws --profile "$1" ecr get-login-password | docker login --username AWS --password-stdin \
@@ -100,51 +88,49 @@ genvpn() {
 }
 
 pullsecret(){
+    # Create a Kubernetes registry secret for an AWS ECR region
+    # Requires AWS CLI: https://aws.amazon.com/cli/
+    # Requires kubectl: https://coreos.com/kubernetes/docs/latest/configure-kubectl.html
+    #
 
-#
-# Create a Kubernetes registry secret for an AWS ECR region
-# Requires AWS CLI: https://aws.amazon.com/cli/
-# Requires kubectl: https://coreos.com/kubernetes/docs/latest/configure-kubectl.html
-#
+    #
+    # This secret can be used with 'imagePullSecret' for Kubernetes
+    #
+    # ...
+    # spec:
+    #   containers:
+    #   - name: busybox
+    #     image: busybox:latest
+    #   imagePullSecrets:
+    #   - name: us-west-2-ecr-registry
+    #...
+    #
 
-#
-# This secret can be used with 'imagePullSecret' for Kubernetes
-#
-# ...
-# spec:
-#   containers:
-#   - name: busybox
-#     image: busybox:latest
-#   imagePullSecrets:
-#   - name: us-west-2-ecr-registry
-#...
-#
+    #
+    # When Kubernetes 1.3.0+ is released this approach should not be necessary
+    # This patch will allow Kubernetes to automatically cache cross-region AWS ECR tokens
+    # https://github.com/kubernetes/kubernetes/pull/24369
+    #
 
-#
-# When Kubernetes 1.3.0+ is released this approach should not be necessary
-# This patch will allow Kubernetes to automatically cache cross-region AWS ECR tokens
-# https://github.com/kubernetes/kubernetes/pull/24369
-#
+    ACCOUNT=`aws --profile think-new sts get-caller-identity | jq -r .Account`
+    REGION=us-east-1
+    SECRET_NAME=${REGION}-ecr-registry
+    EMAIL=savio@thinkific.com
 
-ACCOUNT=`aws --profile think-new sts get-caller-identity | jq -r .Account`
-REGION=us-east-1
-SECRET_NAME=${REGION}-ecr-registry
-EMAIL=savio@thinkific.com
+    #
+    # Fetch token (which will expire in 12 hours)
+    #
 
-#
-# Fetch token (which will expire in 12 hours)
-#
+    TOKEN=`aws ecr --profile think-new get-authorization-token --output text --query authorizationData[].authorizationToken | base64 -d | cut -d: -f2`
 
-TOKEN=`aws ecr --profile think-new get-authorization-token --output text --query authorizationData[].authorizationToken | base64 -d | cut -d: -f2`
+    #
+    # Create or repleace registry secret
+    #
 
-#
-# Create or repleace registry secret
-#
-
-# kubectl delete secret --ignore-not-found $SECRET_NAME
-kubectl create secret docker-registry --dry-run -o yaml $SECRET_NAME \
-   --docker-server=https://${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com \
-   --docker-username=AWS \
-   --docker-password="${TOKEN}" \
-   --docker-email="${EMAIL}"
+    # kubectl delete secret --ignore-not-found $SECRET_NAME
+    kubectl create secret docker-registry --dry-run -o yaml $SECRET_NAME \
+    --docker-server=https://${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com \
+    --docker-username=AWS \
+    --docker-password="${TOKEN}" \
+    --docker-email="${EMAIL}"
 }
