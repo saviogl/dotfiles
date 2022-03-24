@@ -31,6 +31,7 @@ brew "helm"
 brew "kubernetes-cli"
 brew "kubeseal"
 brew "kustomize"
+brew "k9s"
 
 ####
 ## SYSTEM UTILS
@@ -56,6 +57,7 @@ cask "spotify"
 cask "notion"
 cask "slack"
 cask "iterm2"
+cask "zoom"
 
 ## Utilities
 cask "alfred"           # Spotlight replacement
