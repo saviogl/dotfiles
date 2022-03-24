@@ -2,6 +2,10 @@
     link:
       create: true
       relink: true
+    brewfile:
+      stdout: false
+      stderr: false
+      include: ['tap', 'brew', 'cask', 'mas']
 
 - clean: ['~', '~/.config']
 
@@ -24,3 +28,6 @@
   - >
     git cleanall -f
     zsh/plugins/
+
+- brewfile:
+    file: Brewfile
