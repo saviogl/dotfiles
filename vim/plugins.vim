@@ -54,3 +54,4 @@ Plug 'honza/vim-snippets'
 Plug 'maralla/completor.vim'
 
 Plug 'AndrewRadev/splitjoin.vim'
+Plug 'preservim/vimux'
