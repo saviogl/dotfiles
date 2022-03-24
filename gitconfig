@@ -3,10 +3,19 @@
 	name = Savio Lucena
 [core]
 	editor = vim
+  pager = delta
+[interactive]
+  diffFilter = delta --color-only
+[delta]
+  navigate = true
 [pull]
 	ff = only
 [push]
 	default = upstream
+[merge]
+  conflictstyle = diff3
+[diff]
+  colorMoved = default
 [alias]
 	aa = add -A .
 	aacm = !git add -A . && git commit -m

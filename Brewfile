@@ -35,6 +35,9 @@ brew "kustomize"
 ####
 ## SYSTEM UTILS
 ####
+brew "ag"                 # The Silver Searcher
+brew "rg"                 # The Silver Searcher
+brew "git-delta"              # Ripgrep
 brew "ffmpeg"             # Video Processing
 brew "htop"
 brew "tldr"               # Human readable `man` alternative
@@ -47,7 +50,6 @@ brew "wget"
 ####
 ## DESKTOP APPS
 ####
-cask "google-chrome"
 cask "doxie"          # Paperless Scanning App
 cask "authy"
 cask "spotify"
