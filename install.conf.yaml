@@ -29,5 +29,5 @@
     git cleanall -f
     zsh/plugins/
 
-- brewfile:
-    file: Brewfile
+# - brewfile:
+#     file: Brewfile

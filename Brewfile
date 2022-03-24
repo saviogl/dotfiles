@@ -53,6 +53,7 @@ cask "authy"
 cask "spotify"
 cask "notion"
 cask "slack"
+cask "iterm2"
 
 ## Utilities
 cask "alfred"           # Spotlight replacement
