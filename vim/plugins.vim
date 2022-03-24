@@ -6,11 +6,17 @@ Plug 'dense-analysis/ale' " Asynchronous Linting - https://github.com/dense-anal
 
 " Syntax
 Plug 'tpope/vim-rails'
+Plug 'tpope/vim-bundler'
+Plug 'thoughtbot/vim-rspec'
 Plug 'fatih/vim-go'
 Plug 'cespare/vim-toml'
 Plug 'google/vim-jsonnet'
 Plug 'hashivim/vim-terraform' "This plugin adds a :Terraform command that runs terraform, with tab completion of subcommands. It also sets up *.tf, *.tfvars, and *.tfstate files to be highlighted as HCL, HCL, and JSON respectively.
 Plug 'tsandall/vim-rego'
+Plug 'moll/vim-node'
+Plug 'pangloss/vim-javascript'
+Plug 'leafgarland/typescript-vim'
+Plug 'Quramy/tsuquyomi'
 
 Plug 'tpope/vim-surround' " Quoting/parenthesizing made simple - https://github.com/tpope/vim-surround
 
@@ -37,3 +43,14 @@ Plug 'godlygeek/tabular'
 
 " markdown-preview - https://github.com/iamcco/markdown-preview.nvim
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
+
+" Color Schema
+Plug 'altercation/vim-colors-solarized'
+
+"Snippets
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+"Completor
+Plug 'maralla/completor.vim'
+
+Plug 'AndrewRadev/splitjoin.vim'

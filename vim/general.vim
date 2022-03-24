@@ -1,4 +1,11 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""Color Scheme"""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+syntax enable
+set background=dark
+let g:solarized_termcolors=256
+colorscheme solarized
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""" NAVIGATION Mappings"""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -93,6 +100,9 @@ set shiftwidth=2 " When shifiting, indent using 2 spaces
 set expandtab " Convert tabs to space
 set noswapfile " Don't use swapfile
 set nobackup " Don't create annoying backup files
+set complete+=kspell
+"set completeopt=menuone,longest
+set shortmess+=c
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""" FILETYPES """""""""""""""""""""""""""
@@ -100,3 +110,32 @@ set nobackup " Don't create annoying backup files
 augroup filetype
   "au BufNewFile,BufRead *.tf set filetype=terraform
 augroup END
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""" COMPLETION """"""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+
+let g:completor_complete_options = 'menuone,noselect,preview'
+" Enable lsp for go by using gopls
+let g:completor_filetype_map = {}
+let g:completor_filetype_map.go = {'ft': 'lsp', 'cmd': 'gopls'}"
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""" SNIPPETS """"""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:UltiSnipsExpandTrigger="<tab>"
+" list all snippets for current filetype
+let g:UltiSnipsListSnippets="<c-l>"
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""" NERCOMMENTER """"""""""""""""""""""""
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Create default mappings
+let g:NERDCreateDefaultMappings = 1
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
