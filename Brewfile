@@ -15,6 +15,7 @@ brew "starship"
 ####
 cask "visual-studio-code"
 cask "docker"
+brew "vim"
 brew "nvm"
 brew "go"
 brew "terragrunt"
