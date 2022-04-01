@@ -9,6 +9,7 @@ cask_args appdir: "/Applications"
 ####
 brew "git"
 brew "starship"
+brew "jq"
 
 ####
 ## DEVELOPMENT
@@ -32,6 +33,8 @@ brew "kubernetes-cli"
 brew "kubeseal"
 brew "kustomize"
 brew "k9s"
+brew "krew"
+brew "k3d"
 
 ####
 ## SYSTEM UTILS
