@@ -24,6 +24,7 @@ brew "rbenv"
 brew "ruby-build"
 brew "terraform"
 brew "terraform-docs"
+brew "libpq"
 
 ####
 ## K8s
@@ -33,8 +34,10 @@ brew "kubernetes-cli"
 brew "kubeseal"
 brew "kustomize"
 brew "k9s"
+brew "derailed/popeye/popeye"
 brew "krew"
 brew "k3d"
+brew "kubeval"
 
 ####
 ## SYSTEM UTILS
