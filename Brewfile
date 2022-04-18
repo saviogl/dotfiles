@@ -38,6 +38,7 @@ brew "derailed/popeye/popeye"
 brew "krew"
 brew "k3d"
 brew "kubeval"
+brew "kubevela"
 
 ####
 ## SYSTEM UTILS
