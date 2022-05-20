@@ -28,6 +28,10 @@
   - >
     git cleanall -f
     zsh/plugins/
+  - command: ./init.sh
+    stdin: true
+    stderr: true
+    stdout: true
 
 - asdf:
   - plugin: python
