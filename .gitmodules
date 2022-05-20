@@ -11,3 +11,6 @@
 [submodule "zsh/plugins/zsh-autosuggestions"]
 	path = zsh/plugins/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions
+[submodule "dotbot-asdf"]
+	path = dotbot-asdf
+	url = https://github.com/sobolevn/dotbot-asdf.git

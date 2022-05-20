@@ -25,6 +25,7 @@ brew "ruby-build"
 brew "terraform"
 brew "terraform-docs"
 brew "libpq"
+brew "asdf"
 
 ####
 ## K8s
