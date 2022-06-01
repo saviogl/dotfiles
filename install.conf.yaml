@@ -7,12 +7,15 @@
       stderr: false
       include: ['tap', 'brew', 'cask', 'mas']
 
-- clean: ['~', '~/.config']
+- clean: ['~']
 
 - link:
     ~/.bash:
+      if: '[ `uname` = Linux ]'
     ~/.bash_profile:
+      if: '[ `uname` = Linux ]'
     ~/.bashrc:
+      if: '[ `uname` = Linux ]'
     ~/.dotfiles: ''
     ~/.gitconfig:
     ~/.gitignore_global:
@@ -21,7 +24,9 @@
     ~/.vim:
     ~/.vimrc:
     ~/.zsh:
+      if: '[ `uname` = Darwin ]'
     ~/.zshrc:
+      if: '[ `uname` = Darwin ]'
 
 - shell:
   - git update-submodules

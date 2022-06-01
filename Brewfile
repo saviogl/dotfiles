@@ -8,7 +8,6 @@ cask_args appdir: "/Applications"
 ## CLI UTILS
 ####
 brew "git"
-brew "starship"
 brew "jq"
 
 ####
