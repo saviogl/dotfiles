@@ -15,7 +15,6 @@
       force: true
     ~/.bash_profile:
       if: '[ `uname` = Linux ]'
-      force: true
     ~/.bashrc:
       if: '[ `uname` = Linux ]'
       force: true
