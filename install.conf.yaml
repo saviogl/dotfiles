@@ -12,10 +12,13 @@
 - link:
     ~/.bash:
       if: '[ `uname` = Linux ]'
+      force: true
     ~/.bash_profile:
       if: '[ `uname` = Linux ]'
+      force: true
     ~/.bashrc:
       if: '[ `uname` = Linux ]'
+      force: true
     ~/.dotfiles: ''
     ~/.gitconfig:
     ~/.gitignore_global:
@@ -25,8 +28,10 @@
     ~/.vimrc:
     ~/.zsh:
       if: '[ `uname` = Darwin ]'
+      force: true
     ~/.zshrc:
       if: '[ `uname` = Darwin ]'
+      force: true
 
 - shell:
   - git update-submodules
