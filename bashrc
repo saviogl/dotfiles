@@ -4,9 +4,6 @@ source ~/.shell/functions.sh
 # Thinkific
 source ~/.shell/thinkific.sh
 
-# External plugins (initialized before)
-source ~/.bash/plugins_before.bash
-
 # Settings
 source ~/.bash/settings.bash
 
