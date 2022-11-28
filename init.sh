@@ -4,7 +4,7 @@ echo "----- Running dotfiles/init.sh"
 
 # Require starship
 if [[ ! $(which starship) ]]; then
-  curl -sS https://starship.rs/install.sh | sh -s -- -y
+  sudo mkdir -p /usr/local/bin && curl -sS https://starship.rs/install.sh | sh -s -- -y
 fi
 
 # Configure macOS preferences

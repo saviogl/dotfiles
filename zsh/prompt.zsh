@@ -1,2 +1,2 @@
 # Starship(https://starship.rs/) custom prompt
-eval "$(starship init zsh)"
+command -v starship && eval "$(starship init zsh)"

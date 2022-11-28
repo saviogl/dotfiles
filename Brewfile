@@ -15,6 +15,7 @@ brew "jq"
 ####
 cask "visual-studio-code"
 cask "docker"
+cask "warp"
 brew "vim"
 brew "nvm"
 brew "go"
