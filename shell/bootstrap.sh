@@ -1,5 +1,7 @@
 # Set PATH, MANPATH, etc., for Homebrew.
 eval "$(/opt/homebrew/bin/brew shellenv)"
+# Load ASDF
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
 
 path_prepend "$HOME/.local/bin"
 path_prepend "$HOME/.dotfiles/bin"
