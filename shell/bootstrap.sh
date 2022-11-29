@@ -8,6 +8,3 @@ path_prepend "$HOME/.krew/bin"
 path_prepend "$HOME/go/bin"
 path_prepend "/opt/homebrew/opt/libpq/bin"
 path_prepend "/opt/homebrew/opt/python@3.10/libexec/bin" # Python Alias Path - This might change with Brew python installation information
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
