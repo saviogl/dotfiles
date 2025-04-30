@@ -1,0 +1,27 @@
+#!/bin/bash
+set -e
+
+# Detect OS
+OS=$(uname -s)
+PACKAGES=("base")
+
+# Add OS-specific packages
+if [[ "$OS" == "Darwin" ]]; then
+  PACKAGES+=("macos")
+elif [[ "$OS" == "Linux" ]]; then
+  PACKAGES+=("linux")
+fi
+
+# Define stow command
+STOW_CMD="stow -t $HOME -v -D"
+
+echo "Removing dotfiles..."
+
+for pkg in "${PACKAGES[@]}"; do
+  if [[ -d "$pkg" ]]; then
+    echo "Removing $pkg..."
+    $STOW_CMD "$pkg"
+  fi
+done
+
+echo "Dotfiles removal complete!" 

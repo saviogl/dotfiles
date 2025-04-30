@@ -1,0 +1,90 @@
+#!/bin/bash
+set -e
+
+## Configuration
+# Ensure directories exist
+ENSURE_DIRS=("$HOME/.config/zsh/conf.d")
+
+## Arguments
+# Parse arguments
+ADOPT=false
+SIMULATE=false
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --adopt)
+      ADOPT=true
+      shift
+      ;;
+    --simulate)
+      SIMULATE=true
+      shift
+      ;;
+    *)
+      echo "Unknown option: $1"
+      echo "Usage: $0 [--adopt] [--simulate]"
+      exit 1
+      ;;
+  esac
+done
+
+# Detect OS
+OS=$(uname -s)
+PACKAGES=("base")
+
+# Add OS-specific packages
+if [[ "$OS" == "Darwin" ]]; then
+  PACKAGES+=("macos")
+elif [[ "$OS" == "Linux" ]]; then
+  PACKAGES+=("linux")
+fi
+
+# Define stow command and flags
+STOW_CMD="stow -t $HOME -v --no-folding"
+STOW_FLAGS=""
+
+if [[ "$ADOPT" == "true" ]]; then
+  STOW_FLAGS="$STOW_FLAGS --adopt"
+  echo "Adopt mode enabled: existing files will be moved to the repository"
+fi
+
+if [[ "$SIMULATE" == "true" ]]; then
+  STOW_FLAGS="$STOW_FLAGS --simulate"
+  echo "Simulate mode enabled: no changes will be made"
+  ACTION_TEXT="Would install"
+  COMPLETION_TEXT="Simulation complete. No changes were made."
+else
+  ACTION_TEXT="Installing"
+  COMPLETION_TEXT="Dotfiles installation complete!"
+fi
+
+# Ensure directories exist
+if [[ "$SIMULATE" != "true" ]]; then
+  for dir in "${ENSURE_DIRS[@]}"; do
+    if [[ ! -d "$dir" ]]; then
+      echo "Creating directory: $dir"
+      mkdir -p "$dir"
+    fi
+  done
+else
+  for dir in "${ENSURE_DIRS[@]}"; do
+    if [[ ! -d "$dir" ]]; then
+      echo "Would create directory: $dir"
+    fi
+  done
+fi
+
+# Install dotfiles
+echo "$ACTION_TEXT dotfiles for $OS..."
+echo "Packages to process: ${PACKAGES[*]}"
+
+for pkg in "${PACKAGES[@]}"; do
+  if [[ -d "$pkg" ]]; then
+    echo "$ACTION_TEXT $pkg..."
+    $STOW_CMD $STOW_FLAGS "$pkg"
+  else
+    echo "Warning: $pkg directory not found, skipping"
+  fi
+done
+
+echo "$COMPLETION_TEXT" 

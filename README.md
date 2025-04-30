@@ -11,7 +11,6 @@ My personal dotfiles configuration managed with GNU Stow.
 ## Requirements
 
 - [GNU Stow](https://www.gnu.org/software/stow/)
-- `make`
 
 ## Installation
 
@@ -27,7 +26,7 @@ cd ~/.config/dots
 To install the dotfiles:
 
 ```bash
-make install
+./bin/install
 ```
 
 This will automatically:
@@ -37,25 +36,25 @@ This will automatically:
 
 ### Installation Options
 
-| Flag     | Values       | Default | Description                                           |
-|----------|--------------|---------|-------------------------------------------------------|
-| ADOPT    | true, false  | false   | Move existing files into the repository               |
-| SIMULATE | true, false  | false   | Show what would happen without making changes         |
+| Option     | Description                                           |
+|------------|-------------------------------------------------------|
+| --adopt    | Move existing files into the repository               |
+| --simulate | Show what would happen without making changes         |
 
 #### Examples
 
 ```bash
 # Standard installation
-make install
+./bin/install
 
 # Adopt existing files
-make install ADOPT=true
+./bin/install --adopt
 
 # Simulate installation
-make install SIMULATE=true
+./bin/install --simulate
 
 # Simulate adoption of existing files
-make install ADOPT=true SIMULATE=true
+./bin/install --adopt --simulate
 ```
 
 ### Removing Dotfiles
@@ -63,5 +62,5 @@ make install ADOPT=true SIMULATE=true
 To remove the symlinks created by stow:
 
 ```bash
-make clean
+./bin/clean
 ```
