@@ -1,6 +1,17 @@
 #!/bin/bash
 set -e
 
+## Check requirements
+if ! command -v stow &> /dev/null; then
+  echo "Error: GNU Stow is not installed or not in PATH"
+  echo "Please install stow before continuing:"
+  echo "  macOS: brew install stow"
+  echo "  Debian/Ubuntu: apt install stow"
+  echo "  Fedora: dnf install stow"
+  echo "  Arch Linux: pacman -S stow"
+  exit 1
+fi
+
 # Detect OS
 OS=$(uname -s)
 PACKAGES=("base")
