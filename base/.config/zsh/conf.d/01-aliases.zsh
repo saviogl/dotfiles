@@ -5,6 +5,8 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..' 
 
+alias l='ls -1AF --color=auto'
+
 alias vim='nvim'
 alias v='nvim'
 
