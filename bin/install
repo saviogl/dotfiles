@@ -51,7 +51,7 @@ elif [[ "$OS" == "Linux" ]]; then
 fi
 
 # Define stow command and flags
-STOW_CMD="stow -t $HOME -v --no-folding"
+STOW_CMD="stow -t $HOME -v"
 STOW_FLAGS=""
 
 if [[ "$ADOPT" == "true" ]]; then
@@ -89,13 +89,22 @@ fi
 echo "$ACTION_TEXT dotfiles for $OS..."
 echo "Packages to process: ${PACKAGES[*]}"
 
+# Filter out non-existent package directories
+VALID_PACKAGES=()
 for pkg in "${PACKAGES[@]}"; do
   if [[ -d "$pkg" ]]; then
-    echo "$ACTION_TEXT $pkg..."
-    $STOW_CMD $STOW_FLAGS "$pkg"
+    VALID_PACKAGES+=("$pkg")
   else
     echo "Warning: $pkg directory not found, skipping"
   fi
 done
+
+# Use a single stow command for all valid packages
+if [[ ${#VALID_PACKAGES[@]} -gt 0 ]]; then
+  echo "$ACTION_TEXT packages: ${VALID_PACKAGES[*]}..."
+  $STOW_CMD $STOW_FLAGS "${VALID_PACKAGES[@]}"
+else
+  echo "No valid packages found to install."
+fi
 
 echo "$COMPLETION_TEXT" 
