@@ -28,12 +28,12 @@ alias lg='lazygit'
 alias bi="bundle install"
 
 # Tmux
-alias t='tmux'
-alias ta='tmux attach'
-alias tls='tmux list-sessions'
-alias tat='tmux attach -t'
-alias tproj='(PROJ="$(ls ~/src | fzf)" && cd ~/src/"$PROJ" && tmux attach -t "$PROJ" || tmux new -s "$PROJ")'
-alias tdots='(tmux attach -t dots || cd ~/.config/dots && tmux new -s dots)'
+alias tm='tmux'
+alias tma='tmux attach'
+alias tmls='tmux list-sessions'
+alias tmat='tmux attach -t'
+alias tmproj='(PROJ="$(ls ~/src | fzf)" && cd ~/src/"$PROJ" && tmux attach -t "$PROJ" || tmux new -s "$PROJ")'
+alias tmdots='(tmux attach -t dots || cd ~/.config/dots && tmux new -s dots)'
 
 # Bundle exec
 alias be='bundle exec'
