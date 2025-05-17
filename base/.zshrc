@@ -9,7 +9,8 @@ export MANPAGER="less -R --use-color -Dd+r -Du+b" # colored man pages
 export LESS="R --use-color -Dd+r -Du+b"
 
 # Path
-export PATH="$PATH:$HOME/.local/bin"
+path+=("$HOME/.cargo/bin" "$HOME/.local/bin")
+typeset -U path
 
 # History
 HISTSIZE=10000
