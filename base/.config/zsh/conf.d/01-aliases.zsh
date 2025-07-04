@@ -34,6 +34,7 @@ alias tmls='tmux list-sessions'
 alias tmat='tmux attach -t'
 alias tmproj='(PROJ="$(ls ~/src | fzf)" && cd ~/src/"$PROJ" && tmux attach -t "$PROJ" || tmux new -s "$PROJ")'
 alias tmdots='(tmux attach -t dots || cd ~/.config/dots && tmux new -s dots)'
+alias tmc='tmux new -s "${PWD##*/}"'
 
 # Bundle exec
 alias be='bundle exec'
