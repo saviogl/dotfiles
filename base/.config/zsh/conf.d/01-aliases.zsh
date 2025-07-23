@@ -25,6 +25,30 @@ alias gp='git push'
 alias gu='git pull'
 alias lg='lazygit'
 
+# GitHub CLI aliases
+alias ghpr='gh pr create'
+alias ghprl='gh pr list'
+alias ghprv='gh pr view'
+alias ghprc='gh pr checkout'
+alias ghprs='gh pr status'
+alias ghprm='gh pr merge'
+
+# GitHub repo and workflow aliases  
+alias ghr='gh repo view --web'
+
+# GitHub issues
+alias ghi='gh issue create'
+alias ghil='gh issue list'
+alias ghiv='gh issue view'
+alias ghis='gh issue status'
+
+# Quick PR workflow aliases
+alias propen='gh pr view --web'
+alias prdiff='gh pr diff'
+alias prcheck='gh pr checks'
+alias prready='gh pr ready'
+alias prdraft='gh pr ready --undo'
+
 alias bi="bundle install"
 
 # Tmux
