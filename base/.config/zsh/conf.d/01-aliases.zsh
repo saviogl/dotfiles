@@ -25,6 +25,12 @@ alias gp='git push'
 alias gu='git pull'
 alias lg='lazygit'
 
+# Git workflow helpers
+alias gwip='git add -A; git commit -m "WIP"'
+alias gunwip='git log -1 --oneline | grep -q "WIP" && git reset HEAD~1'
+alias gclean='git clean -fd'
+alias gundo='git reset --soft HEAD~1'
+
 # GitHub CLI aliases
 alias ghpr='gh pr create'
 alias ghprl='gh pr list'
@@ -48,6 +54,11 @@ alias prdiff='gh pr diff'
 alias prcheck='gh pr checks'
 alias prready='gh pr ready'
 alias prdraft='gh pr ready --undo'
+
+# PR review aliases
+alias gb-prreview='gh pr list --search "review-requested:@me" --state open --json number,title,author,headRepositoryOwner,headRepository,url --template "{{range .}}{{tablerow (printf \"#%v\" .number) .title .author.login (printf \"%s/%s\" .headRepositoryOwner.login .headRepository.name) .url}}{{end}}"'
+alias gb-prstatus='gh pr status'
+alias gb-prpick='gb-prreview | fzf --ansi --header "Select PR to open" --no-preview | awk "{print \$1}" | sed "s/#//" | xargs -I {} gh pr view {} --web'
 
 alias bi="bundle install"
 
