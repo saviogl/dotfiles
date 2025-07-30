@@ -1,0 +1,38 @@
+#!/bin/bash
+# note-preview - Preview previous weeks' notes
+# Usage: note-preview [weeks_ago]
+# Default: preview last week (1 week ago)
+
+set -e
+
+# Get the directory where scripts are located
+SCRIPT_DIR="$(dirname "$0")"
+
+# Get the number of weeks ago (default to 1 for last week)
+WEEKS_AGO="${1:-1}"
+
+# Validate input is a positive number
+if ! [[ "$WEEKS_AGO" =~ ^[0-9]+$ ]] || [ "$WEEKS_AGO" -eq 0 ]; then
+    echo "Usage: note-preview [weeks_ago]"
+    echo "weeks_ago must be a positive number (default: 1)"
+    exit 1
+fi
+
+# Get the target week's Monday
+WEEK_DATE=$("$SCRIPT_DIR/note-week" -"$WEEKS_AGO")
+
+# Full path to the note file
+NOTE_FILE="$HOME/Notes/$WEEK_DATE.md"
+
+# Check if file exists
+if [ ! -f "$NOTE_FILE" ]; then
+    echo "No notes found for week of $WEEK_DATE"
+    exit 1
+fi
+
+# Display the file using bat if available, otherwise use cat
+if command -v bat >/dev/null 2>&1; then
+    bat --style=full --paging=never "$NOTE_FILE"
+else
+    cat "$NOTE_FILE"
+fi

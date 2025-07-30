@@ -1,0 +1,35 @@
+#!/bin/bash
+# note - Open current week's note in neovim
+# Usage: note
+
+set -e
+
+# Get the directory where scripts are located
+SCRIPT_DIR="$(dirname "$0")"
+
+# Ensure Notes directory exists
+NOTES_DIR="$HOME/Notes"
+mkdir -p "$NOTES_DIR"
+
+# Get current week's Monday
+WEEK_DATE=$("$SCRIPT_DIR/note-week" 0)
+
+# Full path to the note file
+NOTE_FILE="$NOTES_DIR/$WEEK_DATE.md"
+
+# Create file with template if it doesn't exist
+if [ ! -f "$NOTE_FILE" ]; then
+    cat > "$NOTE_FILE" << EOF
+# Week of $WEEK_DATE
+
+## Tasks
+
+- [ ] 
+
+## Notes
+
+EOF
+fi
+
+# Open in neovim
+exec nvim "$NOTE_FILE"

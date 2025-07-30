@@ -1,0 +1,69 @@
+#!/bin/bash
+# note-search - Search through notes using ripgrep and fzf
+# Usage: note-search [search_term]
+
+set -e
+
+NOTES_DIR="$HOME/Notes"
+
+# Check if Notes directory exists
+if [ ! -d "$NOTES_DIR" ]; then
+    echo "Notes directory doesn't exist: $NOTES_DIR"
+    echo "Run 'note' first to create your first weekly note."
+    exit 1
+fi
+
+# Check if any note files exist
+if ! ls "$NOTES_DIR"/*.md >/dev/null 2>&1; then
+    echo "No note files found in $NOTES_DIR"
+    echo "Run 'note' first to create your first weekly note."
+    exit 1
+fi
+
+# Check if ripgrep is available
+if ! command -v rg >/dev/null 2>&1; then
+    echo "Error: ripgrep (rg) is required but not installed."
+    echo "Install it with: brew install ripgrep"
+    exit 1
+fi
+
+# If search term is provided, use it as initial query
+INITIAL_QUERY="${1:-}"
+
+# Create the fzf command with ripgrep
+cd "$NOTES_DIR"
+
+# Use fzf with ripgrep in interactive mode
+# Format: filename:line_number:line_content
+# Only search files matching the weekly note pattern (YYYY-MM-DD.md) at top level
+SELECTED=$(
+    rg --line-number --color=always --smart-case --max-depth=1 --glob="????-??-??.md" ${INITIAL_QUERY:+"$INITIAL_QUERY"} . | \
+    fzf --ansi \
+        --delimiter=: \
+        --preview='
+            filename=$(echo {} | cut -d: -f1)
+            line_number=$(echo {} | cut -d: -f2)
+            if command -v bat >/dev/null 2>&1; then
+                bat --style=full --color=always --highlight-line="$line_number" --paging=never "$filename"
+            else
+                cat -n "$filename" | sed "${line_number}s/.*/ → &/"
+            fi
+        ' \
+        --preview-window=right:60%:wrap:+{2}-5 \
+        --header="Search notes (Ctrl-R to toggle ripgrep)" \
+        --bind="ctrl-r:reload(rg --line-number --color=always --smart-case --max-depth=1 --glob='????-??-??.md' {q} .)" \
+        --query="${INITIAL_QUERY}" \
+        --border
+)
+
+# If something was selected, open the file at that line
+if [ -n "$SELECTED" ]; then
+    FILENAME=$(echo "$SELECTED" | cut -d: -f1)
+    LINE_NUMBER=$(echo "$SELECTED" | cut -d: -f2)
+    
+    # Open in neovim at the specific line
+    exec nvim "+$LINE_NUMBER" "$NOTES_DIR/$FILENAME"
+else
+    echo "No result selected."
+    exit 1
+fi

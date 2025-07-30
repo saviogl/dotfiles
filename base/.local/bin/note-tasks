@@ -1,0 +1,39 @@
+#!/bin/bash
+# note-tasks - Show open tasks from current week's note
+# Usage: note-tasks
+
+set -e
+
+# Get the directory where scripts are located
+SCRIPT_DIR="$(dirname "$0")"
+
+# Get current week's Monday
+WEEK_DATE=$("$SCRIPT_DIR/note-week" 0)
+
+# Full path to the note file
+NOTE_FILE="$HOME/Notes/$WEEK_DATE.md"
+
+# Check if file exists
+if [ ! -f "$NOTE_FILE" ]; then
+    echo "No notes found for current week (week of $WEEK_DATE)"
+    echo "Run 'note' to create this week's note file."
+    exit 1
+fi
+
+# Extract open tasks (lines with "- [ ]")
+echo "Open tasks for week of $WEEK_DATE:"
+echo "=================================="
+
+# Use grep to find open tasks with line numbers
+if grep -n "^- \[ \]" "$NOTE_FILE" >/dev/null 2>&1; then
+    grep -n "^- \[ \]" "$NOTE_FILE" | while IFS=: read -r line_num task; do
+        # Clean up the task text (remove the checkbox)
+        task_text="${task#- \[ \] }"
+        printf "%3d: %s\n" "$line_num" "$task_text"
+    done
+else
+    echo "No open tasks found."
+fi
+
+echo ""
+echo "Tip: Use 'note-task-add \"task description\"' to add a new task"

@@ -1,0 +1,74 @@
+#!/bin/bash
+# note-task-add - Add new task to current week's note
+# Usage: note-task-add "New task description"
+
+set -e
+
+# Check if task description was provided
+if [ $# -eq 0 ]; then
+    echo "Usage: note-task-add \"New task description\""
+    echo "Example: note-task-add \"Review pull request #123\""
+    exit 1
+fi
+
+# Get the directory where scripts are located
+SCRIPT_DIR="$(dirname "$0")"
+
+# Get current week's Monday
+WEEK_DATE=$("$SCRIPT_DIR/note-week" 0)
+
+# Full path to the note file
+NOTE_FILE="$HOME/Notes/$WEEK_DATE.md"
+
+# Ensure the note file exists
+if [ ! -f "$NOTE_FILE" ]; then
+    echo "Error: Weekly note file doesn't exist. Run 'note' first to create it."
+    exit 1
+fi
+
+# Get the task description from all arguments
+TASK_DESC="$*"
+
+# Find the line number after "## Tasks" heading
+TASKS_LINE=$(grep -n "^## Tasks" "$NOTE_FILE" | cut -d: -f1)
+
+if [ -z "$TASKS_LINE" ]; then
+    echo "Error: Could not find '## Tasks' section in the note file."
+    exit 1
+fi
+
+# Find where to insert the new task
+# Look for the first empty line or next section after ## Tasks
+INSERT_LINE=$((TASKS_LINE + 1))
+while IFS= read -r line; do
+    LINE_NUM=$((INSERT_LINE))
+    LINE_CONTENT=$(sed -n "${LINE_NUM}p" "$NOTE_FILE")
+    
+    # If we hit another section (##) or end of file, insert before it
+    if [[ "$LINE_CONTENT" =~ ^##[[:space:]] ]] || [ -z "$LINE_CONTENT" ]; then
+        break
+    fi
+    
+    INSERT_LINE=$((INSERT_LINE + 1))
+done < <(tail -n +$((TASKS_LINE + 1)) "$NOTE_FILE")
+
+# Create a temporary file
+TEMP_FILE=$(mktemp)
+
+# Split the file and insert the new task
+head -n $((INSERT_LINE - 1)) "$NOTE_FILE" > "$TEMP_FILE"
+echo "- [ ] $TASK_DESC" >> "$TEMP_FILE"
+
+# If we're not at the end of file, add the rest
+if [ "$INSERT_LINE" -le "$(wc -l < "$NOTE_FILE")" ]; then
+    tail -n +$INSERT_LINE "$NOTE_FILE" >> "$TEMP_FILE"
+fi
+
+# Replace the original file
+mv "$TEMP_FILE" "$NOTE_FILE"
+
+echo "Added task: $TASK_DESC"
+
+# Show all open tasks
+echo ""
+"$SCRIPT_DIR/note-tasks"

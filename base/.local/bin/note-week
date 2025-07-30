@@ -1,0 +1,38 @@
+#!/bin/bash
+# note-week - Get the Monday date for any week
+# Usage: note-week [weeks_offset]
+# Example: note-week 0    # current week's Monday
+#          note-week -1   # last week's Monday
+#          note-week 2    # Monday two weeks from now
+
+set -e
+
+# Get the offset (default to 0 for current week)
+OFFSET="${1:-0}"
+
+# Get current day of week (1=Monday, 7=Sunday)
+DOW=$(date +%u)
+
+# Calculate days to subtract to get to Monday
+DAYS_TO_MONDAY=$((DOW - 1))
+
+# Calculate the target Monday
+if [ "$OFFSET" -eq 0 ]; then
+    # Current week's Monday
+    TARGET_DATE=$(date -d "-${DAYS_TO_MONDAY} days" +%Y-%m-%d 2>/dev/null || \
+                  date -v-${DAYS_TO_MONDAY}d +%Y-%m-%d)
+else
+    # Offset week's Monday
+    TOTAL_DAYS=$((DAYS_TO_MONDAY - (OFFSET * 7)))
+    if [ "$TOTAL_DAYS" -lt 0 ]; then
+        # Future date
+        TARGET_DATE=$(date -d "${TOTAL_DAYS#-} days" +%Y-%m-%d 2>/dev/null || \
+                      date -v+${TOTAL_DAYS#-}d +%Y-%m-%d)
+    else
+        # Past date
+        TARGET_DATE=$(date -d "-${TOTAL_DAYS} days" +%Y-%m-%d 2>/dev/null || \
+                      date -v-${TOTAL_DAYS}d +%Y-%m-%d)
+    fi
+fi
+
+echo "$TARGET_DATE"

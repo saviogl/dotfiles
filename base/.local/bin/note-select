@@ -1,0 +1,51 @@
+#!/bin/bash
+# note-select - Use fzf to select and open a weekly note file
+# Usage: note-select
+
+set -e
+
+NOTES_DIR="$HOME/Notes"
+
+# Check if Notes directory exists
+if [ ! -d "$NOTES_DIR" ]; then
+    echo "Notes directory doesn't exist: $NOTES_DIR"
+    echo "Run 'note' first to create your first weekly note."
+    exit 1
+fi
+
+# Check if any weekly note files exist (YYYY-MM-DD.md pattern)
+if ! ls "$NOTES_DIR"/????-??-??.md >/dev/null 2>&1; then
+    echo "No weekly note files found in $NOTES_DIR"
+    echo "Run 'note' first to create your first weekly note."
+    exit 1
+fi
+
+# Create a preview function for fzf
+PREVIEW_SCRIPT=$(cat << 'EOF'
+if command -v bat >/dev/null 2>&1; then
+    bat --style=full --color=always --paging=never "$1"
+else
+    cat "$1"
+fi
+EOF
+)
+
+# Use fzf to select a file
+# Sort by modification time (newest first) with ls -t
+# Only show weekly note files matching YYYY-MM-DD.md pattern
+SELECTED_FILE=$(
+    cd "$NOTES_DIR" && \
+    ls -t ????-??-??.md | \
+    fzf --preview="bash -c '$PREVIEW_SCRIPT' _ $NOTES_DIR/{}" \
+        --preview-window=right:60%:wrap \
+        --header="Select a weekly note file (sorted by newest first)" \
+        --border
+)
+
+if [ -n "$SELECTED_FILE" ]; then
+    # Open the selected file in neovim
+    exec nvim "$NOTES_DIR/$SELECTED_FILE"
+else
+    echo "No file selected."
+    exit 1
+fi

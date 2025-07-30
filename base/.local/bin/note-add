@@ -1,0 +1,46 @@
+#!/bin/bash
+# note-add - Add timestamped entry to current week's note
+# Usage: note-add "Title of entry"
+
+set -e
+
+# Check if title was provided
+if [ $# -eq 0 ]; then
+    echo "Usage: note-add \"Title of entry\""
+    echo "Example: note-add \"Meeting with team\""
+    exit 1
+fi
+
+# Get the directory where scripts are located
+SCRIPT_DIR="$(dirname "$0")"
+
+# Get current week's Monday
+WEEK_DATE=$("$SCRIPT_DIR/note-week" 0)
+
+# Full path to the note file
+NOTE_FILE="$HOME/Notes/$WEEK_DATE.md"
+
+# Ensure the note file exists
+if [ ! -f "$NOTE_FILE" ]; then
+    echo "Error: Weekly note file doesn't exist. Run 'note' first to create it."
+    exit 1
+fi
+
+# Get current timestamp with day of week
+TIMESTAMP=$(date +"%Y-%m-%d %H:%M (%A)")
+
+# Get the title from all arguments
+TITLE="$*"
+
+# Add the new entry to the file
+{
+    echo ""
+    echo "### $TIMESTAMP - $TITLE"
+    echo ""
+} >> "$NOTE_FILE"
+
+echo "Added entry: $TIMESTAMP - $TITLE"
+echo "Opening note in editor..."
+
+# Open the file in neovim and go to the end
+exec nvim "+normal G" "$NOTE_FILE"
