@@ -1,0 +1,175 @@
+#!/bin/bash
+# note-migrate-tasks - Migrate incomplete tasks from previous weeks to current week
+# Usage: note-migrate-tasks [weeks_back]
+# Default: migrate from last week (1 week back)
+
+set -e
+
+# Get the directory where scripts are located
+SCRIPT_DIR="$(dirname "$0")"
+
+# Get the number of weeks back to check (default to 1 for last week)
+WEEKS_BACK="${1:-1}"
+
+# Validate input is a positive number
+if ! [[ "$WEEKS_BACK" =~ ^[0-9]+$ ]] || [ "$WEEKS_BACK" -eq 0 ]; then
+    echo "Usage: note-migrate-tasks [weeks_back]"
+    echo "weeks_back must be a positive number (default: 1)"
+    exit 1
+fi
+
+NOTES_DIR="$HOME/Notes"
+
+# Get current week's Monday and file
+CURRENT_WEEK=$("$SCRIPT_DIR/note-week" 0)
+CURRENT_FILE="$NOTES_DIR/$CURRENT_WEEK.md"
+
+# Ensure current week's note exists
+if [ ! -f "$CURRENT_FILE" ]; then
+    echo "Current week's note doesn't exist. Run 'note' first to create it."
+    exit 1
+fi
+
+echo "Migrating incomplete tasks to week of $CURRENT_WEEK..."
+echo "=============================================="
+
+MIGRATED_COUNT=0
+TOTAL_CHECKED=0
+
+# Check previous weeks
+for ((i=1; i<=WEEKS_BACK; i++)); do
+    SOURCE_WEEK=$("$SCRIPT_DIR/note-week" -$i)
+    SOURCE_FILE="$NOTES_DIR/$SOURCE_WEEK.md"
+    
+    if [ ! -f "$SOURCE_FILE" ]; then
+        echo "Skipping week of $SOURCE_WEEK (no note file found)"
+        continue
+    fi
+    
+    echo ""
+    echo "Checking week of $SOURCE_WEEK..."
+    
+    # Extract incomplete tasks from source file
+    INCOMPLETE_TASKS=$(grep "^- \[ \]" "$SOURCE_FILE" 2>/dev/null || true)
+    
+    if [ -z "$INCOMPLETE_TASKS" ]; then
+        echo "  No incomplete tasks found"
+        continue
+    fi
+    
+    # Count tasks in this file
+    TASK_COUNT=$(echo "$INCOMPLETE_TASKS" | wc -l | tr -d ' ')
+    TOTAL_CHECKED=$((TOTAL_CHECKED + TASK_COUNT))
+    
+    echo "  Found $TASK_COUNT incomplete task(s):"
+    echo "$INCOMPLETE_TASKS" | sed 's/^/    /'
+    
+    # Ask user which tasks to migrate
+    echo ""
+    echo "  Migrate these tasks? (y/n/s for selective): "
+    read -r RESPONSE
+    
+    case "$RESPONSE" in
+        [Yy]|[Yy][Ee][Ss])
+            # Migrate all tasks
+            TASKS_TO_MIGRATE="$INCOMPLETE_TASKS"
+            ;;
+        [Ss]|[Ss][Ee][Ll]*)
+            # Selective migration
+            echo "  Select tasks to migrate (enter line numbers, space-separated):"
+            echo "$INCOMPLETE_TASKS" | nl -nln
+            echo -n "  Lines to migrate: "
+            read -r LINE_NUMBERS
+            
+            if [ -n "$LINE_NUMBERS" ]; then
+                TASKS_TO_MIGRATE=""
+                for line_num in $LINE_NUMBERS; do
+                    TASK=$(echo "$INCOMPLETE_TASKS" | sed -n "${line_num}p")
+                    if [ -n "$TASK" ]; then
+                        TASKS_TO_MIGRATE="$TASKS_TO_MIGRATE$TASK"$'\n'
+                    fi
+                done
+                # Remove trailing newline
+                TASKS_TO_MIGRATE=$(echo "$TASKS_TO_MIGRATE" | sed '$d')
+            else
+                TASKS_TO_MIGRATE=""
+            fi
+            ;;
+        *)
+            echo "  Skipping tasks from week of $SOURCE_WEEK"
+            continue
+            ;;
+    esac
+    
+    if [ -n "$TASKS_TO_MIGRATE" ]; then
+        # Find the insertion point in current file (after ## Tasks section)
+        TASKS_LINE=$(grep -n "^## Tasks" "$CURRENT_FILE" | cut -d: -f1)
+        
+        if [ -z "$TASKS_LINE" ]; then
+            echo "  Error: Could not find '## Tasks' section in current week's note."
+            continue
+        fi
+        
+        # Find where to insert (after existing tasks)
+        INSERT_LINE=$((TASKS_LINE + 1))
+        while IFS= read -r line; do
+            LINE_NUM=$((INSERT_LINE))
+            LINE_CONTENT=$(sed -n "${LINE_NUM}p" "$CURRENT_FILE" 2>/dev/null || echo "")
+            
+            # If we hit another section (##) or empty line, insert before it
+            if [[ "$LINE_CONTENT" =~ ^##[[:space:]] ]] || [ -z "$LINE_CONTENT" ]; then
+                break
+            fi
+            
+            INSERT_LINE=$((INSERT_LINE + 1))
+        done < <(tail -n +$((TASKS_LINE + 1)) "$CURRENT_FILE")
+        
+        # Create temporary file with migrated tasks
+        TEMP_FILE=$(mktemp)
+        
+        # Add header comment for migrated tasks
+        head -n $((INSERT_LINE - 1)) "$CURRENT_FILE" > "$TEMP_FILE"
+        
+        # Add migrated tasks with source attribution
+        echo "" >> "$TEMP_FILE"
+        echo "# Migrated from week of $SOURCE_WEEK:" >> "$TEMP_FILE"
+        echo "$TASKS_TO_MIGRATE" >> "$TEMP_FILE"
+        
+        # Add rest of file
+        if [ "$INSERT_LINE" -le "$(wc -l < "$CURRENT_FILE")" ]; then
+            tail -n +$INSERT_LINE "$CURRENT_FILE" >> "$TEMP_FILE"
+        fi
+        
+        # Replace original file
+        mv "$TEMP_FILE" "$CURRENT_FILE"
+        
+        # Count migrated tasks
+        MIGRATED_THIS_WEEK=$(echo "$TASKS_TO_MIGRATE" | wc -l | tr -d ' ')
+        MIGRATED_COUNT=$((MIGRATED_COUNT + MIGRATED_THIS_WEEK))
+        
+        echo "  ✓ Migrated $MIGRATED_THIS_WEEK task(s) to current week"
+        
+        # Mark original tasks as migrated in source file
+        TEMP_SOURCE=$(mktemp)
+        while IFS= read -r task; do
+            # Escape special characters for sed
+            ESCAPED_TASK=$(echo "$task" | sed 's/[[\.*^$()+?{|]/\\&/g')
+            sed "s/^$ESCAPED_TASK$/# MIGRATED: $task/" "$SOURCE_FILE" > "$TEMP_SOURCE"
+            mv "$TEMP_SOURCE" "$SOURCE_FILE"
+        done <<< "$TASKS_TO_MIGRATE"
+        
+        echo "  ✓ Marked original tasks as migrated in source file"
+    fi
+done
+
+echo ""
+echo "=============================================="
+echo "Migration complete!"
+echo "  Total tasks checked: $TOTAL_CHECKED"
+echo "  Tasks migrated: $MIGRATED_COUNT"
+
+if [ "$MIGRATED_COUNT" -gt 0 ]; then
+    echo ""
+    echo "Opening current week's note to review migrated tasks..."
+    exec nvim "$CURRENT_FILE"
+fi

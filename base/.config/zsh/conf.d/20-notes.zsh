@@ -10,6 +10,7 @@ alias np='note-preview'
 # File selection and search
 alias ns='note-select'           # Select note file with fzf
 alias nf='note-search'           # Search notes with ripgrep + fzf
+alias nm='note-migrate-tasks'    # Migrate incomplete tasks from previous weeks
 
 # Additional convenience aliases
 alias nlast='note-preview 1'     # View last week's notes
