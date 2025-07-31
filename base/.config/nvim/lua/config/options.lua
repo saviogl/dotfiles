@@ -7,3 +7,6 @@ vim.g.lazyvim_picker = "fzf"
 
 vim.opt.relativenumber = false
 
+-- Auto-reload files when changed on disk
+vim.opt.autoread = true
+
