@@ -1,0 +1,251 @@
+// Zellij Configuration with Vim Ergonomics
+// Equivalent to tmux configuration but with modern Zellij features
+
+// Theme and appearance (matching tmux red/yellow theme)
+theme "custom-red-yellow"
+
+// Mouse support (equivalent to tmux mouse on)
+mouse_mode true
+
+// Copy to system clipboard (equivalent to tmux set-clipboard)
+copy_clipboard "system"
+
+// Auto layout when creating new session
+auto_layout true
+
+// Session serialization for persistence
+session_serialization true
+
+// Start indices at 1 (equivalent to tmux base-index 1)
+pane_base_index 1
+tab_base_index 1
+
+// Default layout
+default_layout "default"
+
+// Keybindings with vim ergonomics and non-colliding approach
+keybinds {
+    // Clear defaults in normal mode to avoid conflicts with vim/nvim
+    normal clear-defaults=true {
+        // Main prefix key (Ctrl+a equivalent to tmux)
+        bind "Ctrl a" { SwitchToMode "tmux"; }
+        
+        // Alternative non-prefix navigation (like tmux Alt+arrow)
+        bind "Alt h" { MoveFocus "Left"; }
+        bind "Alt j" { MoveFocus "Down"; }
+        bind "Alt k" { MoveFocus "Up"; }
+        bind "Alt l" { MoveFocus "Right"; }
+        
+        // Quick session access
+        bind "Alt s" { SwitchToMode "session"; }
+        
+        // Quick quit
+        bind "Ctrl d" { Detach; }
+    }
+    
+    // Tmux-like mode (activated with Ctrl+a)
+    tmux clear-defaults=true {
+        // Send prefix key through (like tmux Ctrl+a Ctrl+a)
+        bind "Ctrl a" { Write 1; SwitchToMode "Normal"; }
+        
+        // Pane navigation (vim-like hjkl)
+        bind "h" { MoveFocus "Left"; SwitchToMode "Normal"; }
+        bind "j" { MoveFocus "Down"; SwitchToMode "Normal"; }
+        bind "k" { MoveFocus "Up"; SwitchToMode "Normal"; }
+        bind "l" { MoveFocus "Right"; SwitchToMode "Normal"; }
+        
+        // Pane resizing (vim-like HJKL for bigger movements)
+        bind "H" { Resize "Increase Left"; }
+        bind "J" { Resize "Increase Down"; }
+        bind "K" { Resize "Increase Up"; }
+        bind "L" { Resize "Increase Right"; }
+        
+        // Window/Tab management
+        bind "c" { NewTab; SwitchToMode "Normal"; }
+        bind "x" { CloseTab; SwitchToMode "Normal"; }
+        bind "n" { GoToNextTab; SwitchToMode "Normal"; }
+        bind "p" { GoToPreviousTab; SwitchToMode "Normal"; }
+        
+        // Pane splitting (like tmux | and -)
+        bind "|" { NewPane "Right"; SwitchToMode "Normal"; }
+        bind "-" { NewPane "Down"; SwitchToMode "Normal"; }
+        bind "q" { CloseFocus; SwitchToMode "Normal"; }
+        
+        // Session management
+        bind "s" { SwitchToMode "session"; }
+        bind "d" { Detach; }
+        
+        // Reload config (like tmux r)
+        bind "r" { 
+            Run "zellij" "action" "reload-config";
+            SwitchToMode "Normal";
+        }
+        
+        // Layout management
+        bind "Space" { NextLayout; SwitchToMode "Normal"; }
+        bind "Enter" { NewPane "Down"; SwitchToMode "Normal"; }
+        bind "S-Enter" { NewPane "Right"; SwitchToMode "Normal"; }
+        
+        // Floating panes (similar to tmux popups)
+        bind "f" { ToggleFloatingPanes; SwitchToMode "Normal"; }
+        bind "g" { 
+            LaunchOrFocusPlugin "file:~/.config/zellij/plugins/lazygit.wasm" {
+                floating true
+                close_on_exit true
+            };
+            SwitchToMode "Normal";
+        }
+        bind "N" {
+            LaunchOrFocusPlugin "file:~/.config/zellij/plugins/notes.wasm" {
+                floating true
+                close_on_exit true
+            };
+            SwitchToMode "Normal";
+        }
+        
+        // Copy mode
+        bind "[" { SwitchToMode "EnterSearch"; SearchInput 0; }
+        
+        // Return to normal mode
+        bind "Escape" { SwitchToMode "Normal"; }
+    }
+    
+    // Session mode (enhanced session management)
+    session {
+        bind "Escape" { SwitchToMode "Normal"; }
+        bind "d" { Detach; }
+        bind "s" { 
+            LaunchOrFocusPlugin "session-manager" {
+                floating true
+                move_to_focused_tab true
+            };
+        }
+    }
+    
+    // Resize mode with vim keys
+    resize {
+        bind "Escape" { SwitchToMode "Normal"; }
+        bind "h" "Left" { Resize "Increase Left"; }
+        bind "j" "Down" { Resize "Increase Down"; }
+        bind "k" "Up" { Resize "Increase Up"; }
+        bind "l" "Right" { Resize "Increase Right"; }
+        bind "H" { Resize "Decrease Left"; }
+        bind "J" { Resize "Decrease Down"; }
+        bind "K" { Resize "Decrease Up"; }
+        bind "L" { Resize "Decrease Right"; }
+        bind "=" "+" { Resize "Increase"; }
+        bind "-" { Resize "Decrease"; }
+    }
+    
+    // Pane mode 
+    pane {
+        bind "Escape" { SwitchToMode "Normal"; }
+        bind "h" "Left" { MoveFocus "Left"; }
+        bind "l" "Right" { MoveFocus "Right"; }
+        bind "j" "Down" { MoveFocus "Down"; }
+        bind "k" "Up" { MoveFocus "Up"; }
+        bind "n" { NewPane; }
+        bind "d" { NewPane "Down"; }
+        bind "r" { NewPane "Right"; }
+        bind "x" { CloseFocus; }
+        bind "f" { ToggleFocusFullscreen; }
+        bind "z" { TogglePaneFrames; }
+        bind "w" { ToggleFloatingPanes; }
+        bind "e" { TogglePaneEmbedOrFloating; }
+        bind "c" { SwitchToMode "RenamePane"; PaneNameInput 0;}
+    }
+    
+    // Tab mode
+    tab {
+        bind "Escape" { SwitchToMode "Normal"; }
+        bind "r" { SwitchToMode "RenameTab"; TabNameInput 0; }
+        bind "h" "Left" "Up" "k" { GoToPreviousTab; }
+        bind "l" "Right" "Down" "j" { GoToNextTab; }
+        bind "n" { NewTab; SwitchToMode "Normal"; }
+        bind "x" { CloseTab; SwitchToMode "Normal"; }
+        bind "s" { ToggleActiveSyncTab; }
+        bind "b" { BreakPane; SwitchToMode "Normal"; }
+        bind "]" { BreakPaneRight; SwitchToMode "Normal"; }
+        bind "[" { BreakPaneLeft; SwitchToMode "Normal"; }
+        bind "1" { GoToTab 1; SwitchToMode "Normal"; }
+        bind "2" { GoToTab 2; SwitchToMode "Normal"; }
+        bind "3" { GoToTab 3; SwitchToMode "Normal"; }
+        bind "4" { GoToTab 4; SwitchToMode "Normal"; }
+        bind "5" { GoToTab 5; SwitchToMode "Normal"; }
+        bind "6" { GoToTab 6; SwitchToMode "Normal"; }
+        bind "7" { GoToTab 7; SwitchToMode "Normal"; }
+        bind "8" { GoToTab 8; SwitchToMode "Normal"; }
+        bind "9" { GoToTab 9; SwitchToMode "Normal"; }
+        bind "Tab" { ToggleTab; }
+    }
+    
+    // Search mode with vim-like navigation
+    search {
+        bind "Ctrl c" "Escape" { SwitchToMode "Normal"; }
+        bind "j" "Down" { SearchDown; }
+        bind "k" "Up" { SearchUp; }
+        bind "Ctrl f" "PageDown" "Right" "l" { PageScrollDown; }
+        bind "Ctrl b" "PageUp" "Left" "h" { PageScrollUp; }
+        bind "d" { HalfPageScrollDown; }
+        bind "u" { HalfPageScrollUp; }
+        bind "n" { Search "down"; }
+        bind "N" { Search "up"; }
+        bind "c" { SearchToggleOption "CaseSensitive"; }
+        bind "w" { SearchToggleOption "Wrap"; }
+        bind "o" { SearchToggleOption "WholeWord"; }
+    }
+    
+    // Scroll mode
+    scroll {
+        bind "Escape" { SwitchToMode "Normal"; }
+        bind "e" { EditScrollback; SwitchToMode "Normal"; }
+        bind "s" { SwitchToMode "EnterSearch"; SearchInput 0; }
+        bind "Ctrl c" { ScrollToBottom; SwitchToMode "Normal"; }
+        bind "j" "Down" { ScrollDown; }
+        bind "k" "Up" { ScrollUp; }
+        bind "Ctrl f" "PageDown" "Right" "l" { PageScrollDown; }
+        bind "Ctrl b" "PageUp" "Left" "h" { PageScrollUp; }
+        bind "d" { HalfPageScrollDown; }
+        bind "u" { HalfPageScrollUp; }
+    }
+}
+
+// Custom theme matching tmux colors
+themes {
+    custom-red-yellow {
+        bg "#000000"
+        fg "#ff0000"  // red foreground like tmux
+        red "#ff0000"
+        green "#00ff00"
+        blue "#0000ff"
+        yellow "#ffff00"  // yellow like tmux
+        magenta "#ff00ff"
+        orange "#ffaa00"
+        cyan "#00ffff"
+        black "#000000"
+        white "#ffffff"
+    }
+}
+
+// UI configuration
+ui {
+    pane_frames {
+        rounded_corners true
+        hide_session_name false
+    }
+}
+
+// Plugins
+plugins {
+    tab-bar location="zellij:tab-bar"
+    status-bar location="zellij:status-bar"
+    strider location="zellij:strider"
+    compact-bar location="zellij:compact-bar"
+    session-manager location="zellij:session-manager"
+}
+
+// Environment variables
+env {
+    ZELLIJ_AUTO_ATTACH "true"
+    ZELLIJ_AUTO_EXIT "true"
+}

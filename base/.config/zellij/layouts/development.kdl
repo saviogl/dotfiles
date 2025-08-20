@@ -1,0 +1,26 @@
+// Development layout - similar to tmux main-vertical with bottom terminal
+layout {
+    default_tab_template {
+        children
+        pane size=1 borderless=true {
+            plugin location="zellij:compact-bar"
+        }
+    }
+    
+    tab name="Dev" {
+        pane split_direction="vertical" {
+            pane size="60%" {
+                // Main editing area
+                pane
+            }
+            pane size="40%" {
+                // Side pane for file browser or auxiliary tasks
+                pane
+            }
+        }
+        pane size="15" {
+            // Bottom terminal pane (like tmux Enter binding)
+            pane
+        }
+    }
+}

@@ -1,0 +1,16 @@
+// Scratch layout - equivalent to tmux scratch session popup
+layout {
+    default_tab_template {
+        children
+        pane size=1 borderless=true {
+            plugin location="zellij:compact-bar"
+        }
+    }
+    
+    tab name="Scratch" {
+        pane {
+            // Quick scratch workspace
+            cwd "~"
+        }
+    }
+}
