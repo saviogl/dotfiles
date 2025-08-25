@@ -3,7 +3,9 @@
     "allow": [
       "Bash(find:*)",
       "Bash(grep:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "WebSearch",
+      "WebFetch(domain:github.com)"
     ],
     "deny": []
   }
