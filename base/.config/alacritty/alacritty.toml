@@ -1,0 +1,25 @@
+[general]
+import = ["~/.config/alacritty/catppuccin-mocha.toml"]
+
+[font]
+size = 10
+
+[font.bold]
+family = "IosevkaNerdFont"
+style = "Bold"
+
+[font.bold_italic]
+family = "IosevkaNerdFont"
+style = "Bold Italic"
+
+[font.italic]
+family = "IosevkaNerdFont"
+style = "Italic"
+
+[font.normal]
+family = "IosevkaNerdFont"
+style = "Regular"
+
+[window]
+padding = { x = 5, y = 5 }
+opacity = 0.97
