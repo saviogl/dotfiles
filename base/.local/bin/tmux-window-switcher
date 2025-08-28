@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# tmux-window-switcher - Switch to or create a tmux window with a given name and command
+# Usage: tmux-window-switcher <window-name> <command>
+
+set -e
+
+# Check if we're in a tmux session
+if [ -z "$TMUX" ]; then
+    echo "Error: Not in a tmux session" >&2
+    exit 1
+fi
+
+# Check arguments
+if [ $# -lt 2 ]; then
+    echo "Usage: $(basename "$0") <window-name> <command>" >&2
+    exit 1
+fi
+
+WINDOW_NAME="$1"
+shift
+COMMAND="$*"
+
+# Check if window exists
+if tmux list-windows -F '#{window_name}' | grep -q "^${WINDOW_NAME}$"; then
+    # Window exists, switch to it
+    tmux select-window -t "${WINDOW_NAME}"
+else
+    # Window doesn't exist, create it with the command
+    tmux new-window -n "${WINDOW_NAME}" "${COMMAND}"
+fi
