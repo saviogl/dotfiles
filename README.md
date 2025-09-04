@@ -64,3 +64,4 @@ To remove the symlinks created by stow:
 ```bash
 ./bin/clean
 ```
+

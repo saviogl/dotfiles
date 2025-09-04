@@ -1,11 +1,19 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "allow": [
       "Bash(find:*)",
       "Bash(grep:*)",
       "Bash(ls:*)",
       "WebSearch",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(mkdir:*)",
+      "Bash(chmod:*)",
+      "Bash(git add:*)",
+      "Bash(tmux list-keys:*)",
+      "Bash(rbenv version:*)",
+      "Bash(command -v:*)",
+      "WebFetch(domain:zellij.dev)"
     ],
     "deny": []
   }
