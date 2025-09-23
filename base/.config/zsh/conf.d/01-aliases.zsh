@@ -9,6 +9,7 @@ alias l='ls -1AF --color=auto'
 
 alias vim='nvim'
 alias v='nvim'
+alias c='clear'
 
 alias reload-zshrc='source ~/.zshrc'
 
@@ -41,6 +42,7 @@ alias ghprm='gh pr merge'
 
 # GitHub repo and workflow aliases  
 alias ghr='gh repo view --web'
+alias ghd='gh dash'
 
 alias reload='source ~/.zshrc'
 
