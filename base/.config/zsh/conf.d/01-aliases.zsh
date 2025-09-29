@@ -5,6 +5,7 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..' 
 
+# ls alias - will be overridden by eza if available (see 16-modern-tools.zsh)
 alias l='ls -1AF --color=auto'
 
 alias vim='nvim'
@@ -153,3 +154,6 @@ export DOTFILES="~/.config/dots"
 
 alias dots="cd $DOTFILES"
 alias src="cd ~/src"
+
+# Process management
+alias fkill='kill $(ps aux | fzf | awk "{print \$2}")'
