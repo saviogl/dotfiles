@@ -65,3 +65,23 @@ To remove the symlinks created by stow:
 ./bin/clean
 ```
 
+## Package Installation
+
+Bootstrap terminal utilities for your platform:
+
+```bash
+./bin/bootstrap           # Install all packages
+./bin/bootstrap --dry-run # Preview what would be installed
+```
+
+**Supported Platforms:**
+- macOS (homebrew)
+- Arch Linux (pacman)  
+- Debian/Ubuntu (apt)
+
+**Installs these terminal utilities:**
+- Core: git, curl, wget, tmux, zsh, unzip, jq, stow
+- Modern CLI: bat, eza, ripgrep, fd, git-delta, fzf, starship, zoxide
+- Development: neovim, github-cli, lazygit
+- File management: yazi
+
