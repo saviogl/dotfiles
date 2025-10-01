@@ -23,5 +23,4 @@ fi
 # Additional eza aliases when available
 if command -v eza &> /dev/null; then
     alias llt='eza -la --tree --color=auto --icons'
-    alias lg='eza -la --git --color=auto --icons'
 fi
