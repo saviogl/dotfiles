@@ -143,7 +143,47 @@ alias tm='tmux'
 alias tma='tmux attach'
 alias tmls='tmux list-sessions'
 alias tmat='tmux attach -t'
-alias tmproj='(PROJ="$(ls ~/src | fzf)" && cd ~/src/"$PROJ" && tmux attach -t "$PROJ" || tmux new -s "$PROJ")'
+# Project tmux session management
+tmproj() {
+  local proj_dir="$HOME/src"
+  local selected_proj
+  
+  # Use fzf to select project from ~/src directory
+  selected_proj=$(ls "$proj_dir" | fzf --prompt="Select project: " --height=40%)
+  
+  if [[ -z "$selected_proj" ]]; then
+    echo "No project selected"
+    return 1
+  fi
+  
+  local session_name="$selected_proj"
+  local project_path="$proj_dir/$selected_proj"
+  
+  # Check if session already exists
+  if tmux has-session -t "$session_name" 2>/dev/null; then
+    # Session exists, switch to it
+    if [[ -n "$TMUX" ]]; then
+      # We're inside tmux, switch client
+      tmux switch-client -t "$session_name"
+    else
+      # We're outside tmux, attach to session
+      tmux attach-session -t "$session_name"
+    fi
+    echo "📂 Switched to existing session: $session_name"
+  else
+    # Session doesn't exist, create it
+    cd "$project_path"
+    if [[ -n "$TMUX" ]]; then
+      # We're inside tmux, create new session and switch to it
+      tmux new-session -d -s "$session_name" -c "$project_path"
+      tmux switch-client -t "$session_name"
+    else
+      # We're outside tmux, create and attach
+      tmux new-session -s "$session_name" -c "$project_path"
+    fi
+    echo "✨ Created new session: $session_name"
+  fi
+}
 alias tmdots='(tmux attach -t dots || cd ~/.config/dots && tmux new -s dots)'
 alias tmc='tmux new -s "${PWD##*/}"'
 
