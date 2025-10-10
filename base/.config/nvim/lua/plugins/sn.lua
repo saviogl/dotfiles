@@ -1,0 +1,52 @@
+return {}
+-- return {
+--   {
+--     name = "sn-links-local", -- not a repo; prevents Lazy from trying to install
+--     lazy = false, -- or event = "VeryLazy"
+--     config = function()
+--       local notes_dir = vim.fs.normalize(vim.env.NOTES_DIR or vim.fn.expand("~/Notes"))
+--
+--       local function in_notes(buf)
+--         local path = vim.api.nvim_buf_get_name(buf or 0)
+--         return path:sub(1, #notes_dir + 1) == notes_dir .. "/"
+--       end
+--
+--       local function insert_sn_link(use_md)
+--         local args = { "sn", "link", "--pick" }
+--         if use_md then
+--           table.insert(args, "--md")
+--         end
+--         -- Neovim 0.9+: TTY=true so fzf is interactive
+--         vim.system(args, { text = true, tty = true }, function(res)
+--           if res.code == 0 and res.stdout and #res.stdout > 0 then
+--             vim.schedule(function()
+--               vim.api.nvim_put({ res.stdout:gsub("\n$", "") }, "c", false, true)
+--             end)
+--           else
+--             vim.schedule(function()
+--               vim.notify("sn link failed", vim.log.levels.WARN)
+--             end)
+--           end
+--         end)
+--       end
+--
+--       vim.api.nvim_create_autocmd("FileType", {
+--         pattern = "markdown",
+--         callback = function(args)
+--           if not in_notes(args.buf) then
+--             return
+--           end
+--           local opts = { buffer = args.buf }
+--           -- Insert [[ID]]
+--           vim.keymap.set({ "n", "i" }, "<leader>il", function()
+--             insert_sn_link(false)
+--           end, vim.tbl_extend("force", opts, { desc = "Insert [[ID]] link (sn)" }))
+--           -- Insert [Title](path)
+--           vim.keymap.set({ "n", "i" }, "<leader>iL", function()
+--             insert_sn_link(true)
+--           end, vim.tbl_extend("force", opts, { desc = "Insert [Title](path) link (sn)" }))
+--         end,
+--       })
+--     end,
+--   },
+-- }
