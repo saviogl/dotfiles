@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# gb-tmux-setup-default-tabs
+# Sets up default tmux tabs: renames current tab to "bin/dev" and creates "Work" tab
+
+set -euo pipefail
+
+# Check if we're inside a tmux session
+if [[ -z "${TMUX:-}" ]]; then
+    echo "Error: This script must be run from within a tmux session"
+    exit 1
+fi
+
+# Rename the current window to "bin/dev"
+tmux rename-window "bin/dev"
+
+# Create a new window named "Work" (tmux automatically switches to it)
+tmux new-window -n "Work"
+
+# Switch back to the first window (bin/dev)
+tmux select-window -t 1
+
+echo "Default tabs set up successfully:"
+echo "  - Window 1: bin/dev"
+echo "  - Window 2: Work"
