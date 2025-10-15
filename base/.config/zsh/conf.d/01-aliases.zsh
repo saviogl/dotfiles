@@ -45,6 +45,8 @@ alias ghprm='gh pr merge'
 alias ghr='gh repo view --web'
 alias ghd='gh dash'
 
+alias cc='claude --dangerously-skip-permissions'
+
 alias reload='source ~/.zshrc'
 
 # Git worktree management
