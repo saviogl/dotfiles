@@ -1,41 +1,26 @@
 return {
-  {
-    "hrsh7th/nvim-cmp",
-    opts = function(_, opts)
-      local cmp = require("cmp")
+  "saghen/blink.cmp",
+  opts = function(_, opts)
+    -- Disable for markdown, but allow buffer-local override via vim.b.blink_cmp_enabled
+    opts.enabled = function()
+      return vim.b.blink_cmp_enabled
+        or (vim.b.blink_cmp_enabled == nil and vim.bo.filetype ~= "markdown" and vim.bo.buftype ~= "prompt")
+    end
 
-      opts.enabled = function()
-        local buftype = vim.api.nvim_get_option_value("buftype", { buf = 0 })
-        if buftype == "prompt" then
-          return false
-        end
+    -- User commands for manual control
+    vim.api.nvim_create_user_command("CmpDisable", function()
+      vim.b.blink_cmp_enabled = false
+    end, { desc = "Disable completion in current buffer" })
 
-        local filetype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
-        if filetype == "markdown" then
-          return false
-        end
+    vim.api.nvim_create_user_command("CmpEnable", function()
+      vim.b.blink_cmp_enabled = true
+    end, { desc = "Enable completion in current buffer" })
 
-        return true
-      end
+    vim.api.nvim_create_user_command("CmpToggle", function()
+      vim.b.blink_cmp_enabled = not (vim.b.blink_cmp_enabled or vim.bo.filetype ~= "markdown")
+    end, { desc = "Toggle completion in current buffer" })
 
-      opts.completion = vim.tbl_deep_extend("force", opts.completion or {}, {
-        autocomplete = false,
-      })
-
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = "markdown",
-        callback = function()
-          cmp.setup.buffer({
-            enabled = false,
-            completion = {
-              autocomplete = false,
-            },
-          })
-        end,
-      })
-
-      return opts
-    end,
-  },
+    return opts
+  end,
 }
 
