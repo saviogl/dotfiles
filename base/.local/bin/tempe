@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# tempe: Change to a temporary directory
+# Useful for quick sandbox work without cluttering your filesystem
+
+set -euo pipefail
+
+TEMP_DIR=$(mktemp -d)
+echo "Created temporary directory: $TEMP_DIR"
+cd "$TEMP_DIR" || exit 1
+
+# Start a new shell in the temp directory
+exec "${SHELL:-/bin/bash}"

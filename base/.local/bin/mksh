@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# mksh: Quickly create a new shell script with proper setup
+# Usage: mksh <script-name>
+
+set -euo pipefail
+
+if [[ $# -eq 0 ]]; then
+  echo "Usage: mksh <script-name>"
+  echo "Creates a new executable shell script with proper shebang and opens it in your editor"
+  exit 1
+fi
+
+SCRIPT_NAME="$1"
+
+# Create the script if it doesn't exist
+if [[ -f "$SCRIPT_NAME" ]]; then
+  echo "Error: $SCRIPT_NAME already exists"
+  exit 1
+fi
+
+# Write the script template
+cat > "$SCRIPT_NAME" <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Your script here
+
+EOF
+
+# Make it executable
+chmod u+x "$SCRIPT_NAME"
+
+echo "Created executable script: $SCRIPT_NAME"
+
+# Open in editor
+if command -v nvim &> /dev/null; then
+  exec nvim "$SCRIPT_NAME"
+elif command -v vim &> /dev/null; then
+  exec vim "$SCRIPT_NAME"
+elif [[ -n "${EDITOR:-}" ]]; then
+  exec "$EDITOR" "$SCRIPT_NAME"
+else
+  echo "No editor found. Set \$EDITOR or install vim/nvim"
+  exit 1
+fi

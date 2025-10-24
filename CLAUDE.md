@@ -104,6 +104,25 @@ Smart vim-tmux navigation enabled via vim-tmux-navigator pattern (checks for vim
 
 Core packages installed: git, tmux, zsh, neovim, fzf, bat, eza, ripgrep, fd, git-delta, starship, zoxide, gh, lazygit, yazi
 
+### User Scripts
+
+Custom utility scripts are located in `base/.local/bin/` (symlinks to `~/.local/bin/`):
+
+**Quick Development Utilities:**
+- `tempe`: Changes to a temporary directory for quick sandbox work
+- `mksh`: Creates new shell scripts with proper shebang, makes them executable, and opens in editor
+
+**Note Management:**
+- `note`: Core note management interface
+- `note-add`, `note-select`, `note-search`, `note-preview`: Note operations
+- `note-week`, `note-tasks`, `note-task-add`, `note-migrate-tasks`: Task/weekly note management
+
+**Tmux Utilities:**
+- `tmux-window-switcher`: Interactive window switching with fzf
+- `gb-tmux-setup-default-tabs`: Setup default tmux tab layout
+
+All scripts are executable and automatically available in `$PATH` after running `./bin/install`.
+
 ## Important Patterns
 
 ### Adding New Configuration
@@ -111,7 +130,8 @@ Core packages installed: git, tmux, zsh, neovim, fzf, bat, eza, ripgrep, fd, git
 1. **New tool config**: Add to appropriate directory in `base/.config/`
 2. **New shell functionality**: Create new numbered file in `base/.config/zsh/conf.d/`
 3. **New Neovim plugin**: Create file in `base/.config/nvim/lua/plugins/` returning LazyVim spec
-4. **New platform-specific config**: Add to `macos/` or `linux/` mirroring home path structure
+4. **New user script**: Add to `base/.local/bin/` (symlinks to `~/.local/bin/`). Make executable with `chmod +x`
+5. **New platform-specific config**: Add to `macos/` or `linux/` mirroring home path structure
 
 ### Testing Changes
 
