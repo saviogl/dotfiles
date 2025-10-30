@@ -1,13 +1,5 @@
 # Modern tool replacements with fallbacks
 
-# bat (better cat)
-if command -v bat &> /dev/null; then
-    alias cat='bat'
-    alias catp='bat --plain'  # plain cat when needed
-    export BAT_THEME="Catppuccin Mocha"
-    export BAT_STYLE="numbers,changes,header"
-fi
-
 # eza (better ls)
 if command -v eza &> /dev/null; then
     alias ls='eza --color=auto'
