@@ -12,3 +12,8 @@ end, { desc = "Grep word under cursor" })
 vim.keymap.set("n", "<leader>sr", function()
   require("fzf-lua").resume()
 end, { desc = "Resume last search" })
+
+vim.keymap.set("n", "<Leader>gy", function()
+  local filepath = vim.fn.expand("%")
+  vim.fn.setreg("+", filepath) -- write to clippoard
+end, { desc = "Yank filepath to clipboard" })
