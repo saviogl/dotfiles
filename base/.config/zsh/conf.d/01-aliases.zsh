@@ -55,11 +55,12 @@ wt() {
     echo "Usage: wt <branch-name>"
     return 1
   fi
-  
+
   local branch="$1"
   local repo_name=$(basename $(git rev-parse --show-toplevel))
-  local wt_dir="../wt-${repo_name}--${branch}"
-  local session_name="wt-${repo_name}--${branch}"
+  local branch_short="${branch:0:25}"
+  local wt_dir="../wt-${repo_name}--${branch_short}"
+  local session_name="wt-${repo_name}--${branch_short}"
   
   # Create worktree
   git worktree add "$wt_dir" "$branch" 2>/dev/null || git worktree add -b "$branch" "$wt_dir"
@@ -92,7 +93,7 @@ wtrm() {
     return 1
   fi
   
-  # Extract branch name from the worktree path
+  # Extract branch name from the worktree path (will be truncated if created by wt)
   local branch=$(basename "$selected_worktree" | sed 's/.*--//')
   local repo_name=$(basename $(git rev-parse --show-toplevel 2>/dev/null) 2>/dev/null)
   local session_name="wt-${repo_name}--${branch}"
