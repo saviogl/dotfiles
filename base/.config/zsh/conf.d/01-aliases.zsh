@@ -187,7 +187,7 @@ tmproj() {
     echo "✨ Created new session: $session_name"
   fi
 }
-alias tmdots='(tmux attach -t dots || cd ~/.config/dots && tmux new -s dots)'
+alias tmdots='(tmux attach -t dotfiles || cd ~/.config/dotfiles/ && tmux new -s dotfiles)'
 alias tmc='tmux new -s "${PWD##*/}"'
 
 # Bundle exec
