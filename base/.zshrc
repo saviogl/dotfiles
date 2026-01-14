@@ -27,4 +27,5 @@ if [[ -d "$XDG_CONFIG_HOME/zsh/conf.d" ]]; then
   unset file
 fi
 
-
+# Source local machine-specific config (not tracked in git)
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
