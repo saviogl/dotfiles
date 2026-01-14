@@ -88,6 +88,30 @@ get_packages() {
   esac
 }
 
+# gh extensions to install
+GH_EXTENSIONS="dlvhdr/gh-dash"
+
+install_gh_extensions() {
+  if ! command -v gh &> /dev/null; then
+    log_warning "gh not found, skipping extensions"
+    return
+  fi
+
+  log_info "Installing gh extensions..."
+
+  for ext in $GH_EXTENSIONS; do
+    if [[ "$DRY_RUN" == "true" ]]; then
+      log_info "Would run: gh extension install $ext"
+    else
+      if gh extension list | grep -q "${ext##*/}"; then
+        log_info "Extension $ext already installed"
+      else
+        gh extension install "$ext" && log_success "Installed $ext" || log_warning "Failed to install $ext"
+      fi
+    fi
+  done
+}
+
 # Get package manager command for platform
 get_pkg_manager() {
   local platform="$1"
@@ -187,21 +211,24 @@ install_packages() {
 # Main execution
 main() {
   log_info "Terminal Utilities Bootstrap"
-  
+
   if [[ "$DRY_RUN" == "true" ]]; then
     log_info "DRY RUN MODE - No changes will be made"
   fi
-  
+
   # Detect platform
   local platform=$(detect_platform)
   log_info "Detected platform: $platform"
-  
+
   # Check package manager
   check_package_manager "$platform"
-  
+
   # Install packages
   install_packages "$platform"
-  
+
+  # Install gh extensions
+  install_gh_extensions
+
   if [[ "$DRY_RUN" == "true" ]]; then
     log_info "Dry run complete. No changes were made."
   else
