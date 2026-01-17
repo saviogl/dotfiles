@@ -91,8 +91,11 @@ Popup integrations for temporary tools:
 - `C-a G`: GitHub dashboard (gh dash)
 - `C-a Enter`: Bottom terminal (15 lines)
 - `C-a M-Enter`: Scratch session
+- `C-a ?`: Searchable keybindings help (fzf popup)
 
 Smart vim-tmux navigation enabled via vim-tmux-navigator pattern (checks for vim process).
+
+**Keybindings Help File**: `base/.config/tmux/help.txt` contains a human-readable reference of all custom tmux keybindings. This file is displayed via `C-a ?` in a searchable fzf popup.
 
 ### Cross-Platform Package Management
 
@@ -132,6 +135,10 @@ All scripts are executable and automatically available in `$PATH` after running 
 3. **New Neovim plugin**: Create file in `base/.config/nvim/lua/plugins/` returning LazyVim spec
 4. **New user script**: Add to `base/.local/bin/` (symlinks to `~/.local/bin/`). Make executable with `chmod +x`
 5. **New platform-specific config**: Add to `macos/` or `linux/` mirroring home path structure
+
+### Maintaining Tmux Help File
+
+**IMPORTANT**: When adding, removing, or modifying tmux keybindings in `base/.tmux.conf`, always update the corresponding help file at `base/.config/tmux/help.txt` to keep it in sync. This file serves as the user-facing documentation shown via `C-a ?`.
 
 ### Testing Changes
 

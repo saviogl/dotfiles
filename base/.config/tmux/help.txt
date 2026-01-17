@@ -1,0 +1,64 @@
+TMUX KEYBINDINGS REFERENCE
+==========================
+Prefix: C-a (Ctrl+a)
+
+NAVIGATION (Pane Selection)
+---------------------------
+C-a h          Select pane left
+C-a j          Select pane down
+C-a k          Select pane up
+C-a l          Select pane right
+M-Left         Select pane left (no prefix)
+M-Right        Select pane right (no prefix)
+M-Up           Select pane up (no prefix)
+M-Down         Select pane down (no prefix)
+C-h/j/k/l      Vim-aware pane navigation (no prefix)
+
+PANE RESIZING
+-------------
+C-a H          Resize pane left 5 cells
+C-a J          Resize pane down 5 cells
+C-a K          Resize pane up 5 cells
+C-a L          Resize pane right 5 cells
+
+SPLITTING & PANES
+-----------------
+C-a |          Split horizontally (side by side)
+C-a -          Split vertically (top/bottom)
+C-a q          Kill current pane
+C-a b          Break pane into new window
+C-a B          Join pane from another window
+
+MASTER-STACK LAYOUT (DWM-style)
+-------------------------------
+C-a m          New pane as master (current -> stack)
+C-a M          Promote current pane to master
+C-a Tab        Cycle which pane is master
+C-a =          Reset to master-vertical layout
+C-Space        Cycle through layouts (no prefix)
+
+POPUPS & TOOLS
+--------------
+C-a g          Lazygit (90% popup)
+C-a G          GitHub Dashboard - gh dash (90% popup)
+C-a Enter      Bottom terminal pane (15 lines)
+C-a M-Enter    Scratch session popup (75% popup)
+C-a C-n        Notes popup (85% popup)
+C-a C-e        Editor popup - nvim (90% popup)
+C-a C-o        Open current directory in OS file explorer
+C-a ?          This help menu
+
+SESSION & WINDOW
+----------------
+C-a s          Choose session (interactive)
+C-a c          New window
+C-a ,          Rename current window
+C-a n          Next window
+C-a p          Previous window
+C-a w          Choose window (interactive)
+C-a d          Detach from session
+
+MISC
+----
+C-a r          Reload tmux configuration
+C-a C-a        Send C-a to application (nested tmux)
