@@ -1,0 +1,74 @@
+[color]
+	ui = true
+
+[core]
+	editor = nvim
+
+[push]
+	useForceIfIncludes = true
+	autoSetupRemote = true
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[alias]
+	aa = add -A .
+	aacm = !git add -A . && git commit -m
+	amend = commit --amend -m
+	br = branch
+	brd = branch -d
+	brdf = branch -D
+	brv = branch -vv
+	cleanall = clean -fdx
+	cm = commit -m
+	co = checkout
+	cob = checkout -b
+	coo = !git fetch && git checkout
+	cp = cherry-pick
+	dev = !git checkout dev && git pull origin dev
+	f = "!git ls-files | grep -i"
+	gr = grep -Ii
+	la = "!git config -l | grep alias | cut -c 7-"
+	lb = !git reflog show --pretty=format:'%gs ~ %gd' --date=relative | grep 'checkout:' | grep -oE '[^ ]+ ~ .*' | awk -F~ '!seen[$1]++' | head -n 10 | awk -F' ~ HEAD@{' '{printf(\"  \\033[33m%s: \\033[37m %s\\033[0m\\n\", substr($2, 1, length($2)-1), $1)}'
+	lg = log --graph --decorate --show-signature
+	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+	ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+	lsa = log --pretty=format:"%C(yellow)%h\\ %Cred(%ar)\\ %Creset%s\\ %Cblue\\ %an\\ %C(yellow)%d" --decorate
+	lpm = "!f() { git branch --merged ${1-main} | grep -v \" ${1-main}$\" | xargs -r git branch -d; }; f"
+	master = !git checkout master && git pull origin
+	merged = branch --merged
+	plb = "!git branch -vv | grep 'origin/.*: gone]' | awk '{print $1}' | xargs git branch -d"
+	plo = pull origin
+	plod = pull origin dev
+	ploh = pull origin HEAD
+	plom = pull origin master
+	plos = pull origin staging
+	po = push origin
+	pod = push origin dev
+	pof = push origin --force-with-lease
+	poh = push origin HEAD
+	pom = push origin master
+	pos = push origin staging
+	pr = !gh pr create -f -w -a @me
+	prt = !gh pr create -T ./.github/pull_request_template.md -w -a @me
+	prune = "!f() { echo \"Checking for merged branches...\" >&2; BRANCHES=$(git branch --merged ${1:-main} | grep -vE \"(^\\*|main|master|dev|staging)\"); if [ -z \"$BRANCHES\" ]; then echo \"No merged branches to delete\" >&2; else echo \"Deleting merged branches:\" >&2; echo \"$BRANCHES\" | xargs -n 1 git branch -d; fi; echo \"Pruning remote tracking branches...\" >&2; git remote prune origin; }; f"
+	puo = "!git push origin -u $(git symbolic-ref --short HEAD)"
+	pushf = push --force-with-lease
+	rbm = rebase main
+	rbs = "!f() { if [ $# -eq 0 ]; then git rebase -i --exec 'git commit --amend --no-edit -S' HEAD~1; else git rebase -i --exec 'git commit --amend --no-edit -S' $1; fi; }; f"
+	rpo = remote prune origin
+	st = status
+	staging = !git checkout staging && git pull origin staging
+	unstage = reset --soft HEAD^
+	upd = !git checkout main && git pull origin && git checkout - && git rebase main
+	update-submodules = submodule update --init --recursive
+	upgrade-submodules = submodule update --init --remote
+	wip = !git add . && git cm \"chore: wip\"
+	wipa = !git add . && git cm --amend
+
+# Include local config for machine-specific settings (user, signing, credentials)
+[include]
+	path = ~/.gitconfig.local
