@@ -58,6 +58,14 @@ C-a p          Previous window
 C-a w          Choose window (interactive)
 C-a d          Detach from session
 
+COPY MODE (vi keys)
+-------------------
+C-a [          Enter copy mode
+v              Begin selection
+y              Copy selection to system clipboard
+q / Escape     Exit copy mode
+Mouse drag     Select and copy to system clipboard on release
+
 MISC
 ----
 C-a r          Reload tmux configuration
