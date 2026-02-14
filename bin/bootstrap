@@ -83,7 +83,7 @@ get_packages() {
     debian)
       # Some packages have different names: exa instead of eza, fd-find instead of fd
       # starship, zoxide, yazi need special handling
-      echo "git curl wget tmux zsh unzip jq stow bat exa ripgrep fd-find git-delta-musl fzf neovim gh lazygit"
+      echo "git curl wget tmux zsh unzip jq stow bat exa ripgrep fd-find git-delta-musl fzf starship zoxide neovim gh lazygit yazi"
       ;;
   esac
 }
