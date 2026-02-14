@@ -83,7 +83,7 @@ get_packages() {
     debian)
       # Some packages have different names: exa instead of eza, fd-find instead of fd
       # starship, zoxide, yazi need special handling
-      echo "git curl wget tmux zsh unzip jq stow bat exa ripgrep fd-find git-delta-musl fzf starship zoxide neovim gh lazygit yazi"
+      echo "git curl wget tmux zsh unzip jq stow bat eza ripgrep fd-find fzf starship zoxide delta neovim gh lazygit yazi"
       ;;
   esac
 }
@@ -191,6 +191,20 @@ install_packages() {
           zoxide)
             log_info "Installing zoxide via curl..."
             curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+            ;;
+          delta)
+            log_info "Installing delta from GitHub releases..."
+            local arch=$(dpkg --print-architecture)
+            local delta_url=$(curl -s https://api.github.com/repos/dandavison/delta/releases/latest \
+              | grep "browser_download_url.*delta.*${arch}.*\.deb" \
+              | head -1 \
+              | cut -d '"' -f 4)
+            if [[ -n "$delta_url" ]]; then
+              local tmp_deb=$(mktemp /tmp/delta-XXXXX.deb)
+              curl -sL "$delta_url" -o "$tmp_deb" && sudo dpkg -i "$tmp_deb" && rm -f "$tmp_deb"
+            else
+              log_warning "Could not find delta .deb for $arch, skipping"
+            fi
             ;;
           yazi)
             log_warning "yazi not available in apt, skipping (install manually with cargo)"
