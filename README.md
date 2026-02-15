@@ -80,10 +80,17 @@ This will automatically:
 
 ### Installation Options
 
-| Option     | Description                                   |
-| ---------- | --------------------------------------------- |
-| --adopt    | Move existing files into the repository       |
-| --simulate | Show what would happen without making changes |
+| Option     | Description                                            |
+| ---------- | ------------------------------------------------------ |
+| --adopt    | Move existing files into the repository                |
+| --override | Back up conflicts, then replace in place when stowing  |
+| --restore  | Restore from the latest override backup                |
+| --simulate | Show what would happen without making changes          |
+
+Notes:
+- `--adopt` cannot be used with `--override` or `--restore`.
+- `--override` and `--restore` are mutually exclusive.
+- Backups are stored in `.backup/` (machine-specific, gitignored).
 
 #### Examples
 
@@ -99,6 +106,12 @@ This will automatically:
 
 # Simulate adoption of existing files
 ./bin/install --adopt --simulate
+
+# Override existing files in place
+./bin/install --override
+
+# Restore from the latest override backup
+./bin/install --restore
 ```
 
 ### Removing Dotfiles

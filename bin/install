@@ -4,6 +4,12 @@ set -e
 ## Configuration
 # Ensure directories exist
 ENSURE_DIRS=("$HOME/.config/zsh/conf.d")
+BACKUP_BASE="$HOME/.config/dotfiles/.backup"
+MANIFEST_NAME="manifest.txt"
+
+usage() {
+  echo "Usage: $0 [--adopt] [--override] [--restore] [--simulate]"
+}
 
 ## Check requirements
 if ! command -v stow &> /dev/null; then
@@ -20,11 +26,21 @@ fi
 # Parse arguments
 ADOPT=false
 SIMULATE=false
+OVERRIDE=false
+RESTORE=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --adopt)
       ADOPT=true
+      shift
+      ;;
+    --override)
+      OVERRIDE=true
+      shift
+      ;;
+    --restore)
+      RESTORE=true
       shift
       ;;
     --simulate)
@@ -33,11 +49,80 @@ while [[ $# -gt 0 ]]; do
       ;;
     *)
       echo "Unknown option: $1"
-      echo "Usage: $0 [--adopt] [--simulate]"
+      usage
       exit 1
       ;;
   esac
 done
+
+if [[ "$ADOPT" == "true" && ( "$OVERRIDE" == "true" || "$RESTORE" == "true" ) ]]; then
+  echo "Error: --adopt cannot be used with --override or --restore"
+  usage
+  exit 1
+fi
+
+if [[ "$OVERRIDE" == "true" && "$RESTORE" == "true" ]]; then
+  echo "Error: --override and --restore cannot be used together"
+  usage
+  exit 1
+fi
+
+restore_backups() {
+  if [[ ! -d "$BACKUP_BASE" ]]; then
+    echo "No backups found at $BACKUP_BASE"
+    exit 1
+  fi
+
+  local latest_backup
+  latest_backup=$(ls -1dt "$BACKUP_BASE"/*/ 2>/dev/null | head -n 1)
+  if [[ -z "$latest_backup" ]]; then
+    echo "No backups found at $BACKUP_BASE"
+    exit 1
+  fi
+
+  local manifest
+  manifest="$latest_backup/$MANIFEST_NAME"
+  if [[ ! -f "$manifest" ]]; then
+    echo "Manifest not found: $manifest"
+    exit 1
+  fi
+
+  echo "Restoring from backup: $latest_backup"
+
+  while IFS=$'\t' read -r original backup; do
+    if [[ -z "$original" || -z "$backup" ]]; then
+      continue
+    fi
+
+    if [[ "$SIMULATE" == "true" ]]; then
+      echo "Would restore: $original"
+      continue
+    fi
+
+    if [[ -e "$original" || -L "$original" ]]; then
+      rm -rf "$original"
+    fi
+
+    mkdir -p "$(dirname "$original")"
+
+    if [[ -e "$backup" || -L "$backup" ]]; then
+      mv -f "$backup" "$original"
+    else
+      echo "Warning: backup missing for $original"
+    fi
+  done < "$manifest"
+
+  if [[ "$SIMULATE" == "true" ]]; then
+    echo "Simulation complete. No changes were made."
+  else
+    echo "Restore complete."
+  fi
+}
+
+if [[ "$RESTORE" == "true" ]]; then
+  restore_backups
+  exit 0
+fi
 
 # Detect OS
 OS=$(uname -s)
@@ -51,16 +136,21 @@ elif [[ "$OS" == "Linux" ]]; then
 fi
 
 # Define stow command and flags
-STOW_CMD="stow -t $HOME -v"
-STOW_FLAGS=""
+STOW_CMD=(stow -t "$HOME" -v)
+STOW_FLAGS=()
 
 if [[ "$ADOPT" == "true" ]]; then
-  STOW_FLAGS="$STOW_FLAGS --adopt"
+  STOW_FLAGS+=(--adopt)
   echo "Adopt mode enabled: existing files will be moved to the repository"
 fi
 
+if [[ "$OVERRIDE" == "true" ]]; then
+  STOW_FLAGS+=("--override=.*")
+  echo "Override mode enabled: conflicting files will be backed up"
+fi
+
 if [[ "$SIMULATE" == "true" ]]; then
-  STOW_FLAGS="$STOW_FLAGS --simulate"
+  STOW_FLAGS+=(--simulate)
   echo "Simulate mode enabled: no changes will be made"
   ACTION_TEXT="Would install"
   COMPLETION_TEXT="Simulation complete. No changes were made."
@@ -85,6 +175,32 @@ else
   done
 fi
 
+contains_flag() {
+  local needle="$1"
+  shift
+  for flag in "$@"; do
+    if [[ "$flag" == "$needle" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+collect_conflicts() {
+  local sim_flags
+  sim_flags=("${STOW_FLAGS[@]}")
+  if ! contains_flag "--simulate" "${sim_flags[@]}"; then
+    sim_flags+=(--simulate)
+  fi
+
+  local output
+  output=$(
+    "${STOW_CMD[@]}" "${sim_flags[@]}" "${VALID_PACKAGES[@]}" 2>&1 || true
+  )
+
+  printf '%s\n' "$output" | awk '/cannot stow .* over existing target /{ match($0, /over existing target ([^ ]+) /, m); if (m[1] != "") print m[1] }'
+}
+
 # Install dotfiles
 echo "$ACTION_TEXT dotfiles for $OS..."
 echo "Packages to process: ${PACKAGES[*]}"
@@ -99,12 +215,44 @@ for pkg in "${PACKAGES[@]}"; do
   fi
 done
 
+# Backup conflicts if override is enabled
+if [[ "$OVERRIDE" == "true" && ${#VALID_PACKAGES[@]} -gt 0 ]]; then
+  mapfile -t CONFLICT_TARGETS < <(collect_conflicts)
+  if [[ ${#CONFLICT_TARGETS[@]} -eq 0 ]]; then
+    echo "No conflicts detected; no backups created."
+  else
+    local_backup_root="$BACKUP_BASE/$(date +%Y-%m-%d_%H-%M-%S)"
+    if [[ "$SIMULATE" == "true" ]]; then
+      echo "Would back up ${#CONFLICT_TARGETS[@]} conflicting path(s) to $local_backup_root"
+      for target in "${CONFLICT_TARGETS[@]}"; do
+        echo "Would back up: $HOME/$target"
+      done
+    else
+      echo "Backing up ${#CONFLICT_TARGETS[@]} conflicting path(s) to $local_backup_root"
+      mkdir -p "$local_backup_root"
+      for target in "${CONFLICT_TARGETS[@]}"; do
+        target_path="$HOME/$target"
+        if [[ -e "$target_path" || -L "$target_path" ]]; then
+          backup_path="$local_backup_root/$target"
+          mkdir -p "$(dirname "$backup_path")"
+          if [[ -e "$backup_path" || -L "$backup_path" ]]; then
+            rm -rf "$backup_path"
+          fi
+          mv -f "$target_path" "$backup_path"
+          printf '%s\t%s\n' "$target_path" "$backup_path" >> "$local_backup_root/$MANIFEST_NAME"
+        fi
+      done
+      echo "Backup manifest: $local_backup_root/$MANIFEST_NAME"
+    fi
+  fi
+fi
+
 # Use a single stow command for all valid packages
 if [[ ${#VALID_PACKAGES[@]} -gt 0 ]]; then
   echo "$ACTION_TEXT packages: ${VALID_PACKAGES[*]}..."
-  $STOW_CMD $STOW_FLAGS "${VALID_PACKAGES[@]}"
+  "${STOW_CMD[@]}" "${STOW_FLAGS[@]}" "${VALID_PACKAGES[@]}"
 else
   echo "No valid packages found to install."
 fi
 
-echo "$COMPLETION_TEXT" 
+echo "$COMPLETION_TEXT"
