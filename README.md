@@ -57,10 +57,10 @@ My personal dotfiles configuration managed with GNU Stow.
 
 ## Installation
 
-Clone this repository to my preferred location (recommended: `~/.config/dots`):
+Clone this repository to your preferred location (recommended: `~/.config/dots`):
 
 ```bash
-git clone https://github.com/REDACTED/dots.git ~/.config/dots
+git clone <repo-url> ~/.config/dots
 cd ~/.config/dots
 ```
 
@@ -75,7 +75,7 @@ To install the dotfiles:
 This will automatically:
 
 1. Install the base configuration
-2. Detect my operating system (macOS or Linux)
+2. Detect the operating system (macOS or Linux)
 3. Install OS-specific configuration if available
 
 ### Installation Options
