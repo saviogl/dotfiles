@@ -255,4 +255,10 @@ else
   echo "No valid packages found to install."
 fi
 
+# Install pre-commit hooks if available
+if [[ "$SIMULATE" != "true" ]] && command -v pre-commit &> /dev/null; then
+  echo "Installing pre-commit hooks..."
+  pre-commit install
+fi
+
 echo "$COMPLETION_TEXT"

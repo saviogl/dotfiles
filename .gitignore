@@ -1,3 +1,33 @@
 # Machine-specific local overrides
 *.local
 .backup/
+
+# ── Secrets and credentials ──
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+id_ecdsa
+credentials
+credentials.json
+token.json
+.netrc
+.npmrc
+.pypirc
+
+# ── SSH / GPG ──
+.ssh/
+.gnupg/
+
+# ── Editor and OS artifacts ──
+.DS_Store
+*~
+*.swp
+*.swo
+
+# ── Claude Code working files ──
+.claude/plans/
