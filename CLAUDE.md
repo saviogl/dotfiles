@@ -126,6 +126,26 @@ Custom utility scripts are located in `base/.local/bin/` (symlinks to `~/.local/
 
 All scripts are executable and automatically available in `$PATH` after running `./bin/install`.
 
+## Security
+
+This is a **public repository**. Pre-commit hooks (`.pre-commit-config.yaml`) enforce security gates on every commit:
+
+- **gitleaks**: Blocks commits containing API keys, tokens, passwords, or credential patterns
+- **detect-private-key**: Catches `BEGIN RSA/OPENSSH PRIVATE KEY` blocks
+- **shellcheck**: Lints shell scripts for errors (excludes `.zsh` files)
+- **check-merge-conflict / check-symlinks / check-toml / check-yaml**: Structural validation
+
+**IMPORTANT — Never commit:**
+- Secrets, API keys, tokens, passwords, or credentials (even as examples — use `REDACTED` or `<placeholder>`)
+- Private keys or certificates (`.pem`, `.key`, `.p12`)
+- Personal information: real names, emails, hostnames, IP addresses, file paths containing usernames
+- SSH or GPG configuration (`.ssh/`, `.gnupg/`)
+- Environment files (`.env`, `.env.*`)
+
+If pre-commit hooks block a commit, fix the issue — do not bypass with `--no-verify`.
+
+When adding new config files, check that they don't contain machine-specific paths or personal data before committing.
+
 ## Important Patterns
 
 ### Adding New Configuration
