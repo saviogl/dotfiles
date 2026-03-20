@@ -50,6 +50,7 @@ ZSH configuration is split across numbered modules in `base/.config/zsh/conf.d/`
 - `11-fzf.zsh`: Fuzzy finder setup
 - `13-homebrew.zsh`: macOS package manager paths
 - `16-modern-tools.zsh`: bat/eza/delta configurations with fallbacks
+- `17-kubernetes.zsh`: Kubernetes (kubectl, kubectx/kubens, kubecolor) and Azure CLI aliases
 
 Main `.zshrc` sources these modules in order. When adding new functionality, create a new numbered module rather than editing existing ones to maintain modularity.
 
@@ -105,7 +106,7 @@ Smart vim-tmux navigation enabled via vim-tmux-navigator pattern (checks for vim
 - **Platform-specific packages**: Handles name variations (e.g., `eza` vs `exa`, `gh` vs `github-cli`)
 - **Special installations**: Debian requires curl-based installs for starship/zoxide
 
-Core packages installed: git, tmux, zsh, neovim, fzf, bat, eza, ripgrep, fd, git-delta, starship, zoxide, gh, lazygit, yazi
+Core packages installed: git, tmux, zsh, neovim, fzf, bat, eza, ripgrep, fd, git-delta, starship, zoxide, gh, lazygit, yazi, kubectl, kubectx, k9s, kubecolor, helm, azure-cli, kubelogin
 
 ### User Scripts
 

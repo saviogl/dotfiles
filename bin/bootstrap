@@ -74,16 +74,16 @@ get_packages() {
   case "$platform" in
     macos)
       # All packages available via homebrew
-      echo "git curl wget tmux zsh unzip jq stow bat eza ripgrep fd git-delta fzf starship zoxide neovim gh lazygit yazi"
+      echo "git curl wget tmux zsh unzip jq stow bat eza ripgrep fd git-delta fzf starship zoxide neovim gh lazygit yazi kubernetes-cli kubectx k9s kubecolor helm azure-cli"
       ;;
     arch)
       # github-cli is 'github-cli' not 'gh' in AUR
-      echo "git curl wget tmux zsh unzip jq stow bat eza ripgrep fd git-delta fzf starship zoxide neovim github-cli lazygit yazi"
+      echo "git curl wget tmux zsh unzip jq stow bat eza ripgrep fd git-delta fzf starship zoxide neovim github-cli lazygit yazi kubectl kubectx k9s kubecolor helm"
       ;;
     debian)
       # Some packages have different names: exa instead of eza, fd-find instead of fd
-      # starship, zoxide, yazi need special handling
-      echo "git curl wget tmux zsh unzip jq stow bat eza ripgrep fd-find fzf starship zoxide delta neovim gh lazygit yazi"
+      # starship, zoxide, yazi, azure-cli, kubelogin need special handling
+      echo "git curl wget tmux zsh unzip jq stow bat eza ripgrep fd-find fzf starship zoxide delta neovim gh lazygit yazi kubectl kubectx k9s kubecolor helm"
       ;;
   esac
 }
@@ -175,9 +175,15 @@ install_packages() {
   local install_cmd=$(get_pkg_manager "$platform")
   
   log_info "Installing packages for $platform: $packages"
-  
+
   if [[ "$DRY_RUN" == "true" ]]; then
     log_info "Would run: $install_cmd $packages"
+    if [[ "$platform" == "macos" ]]; then
+      log_info "Would run: brew install Azure/kubelogin/kubelogin"
+    else
+      log_info "Would install azure-cli via curl"
+      log_info "Would install kubelogin via curl"
+    fi
   else
     # Special handling for Debian packages that need different treatment
     if [[ "$platform" == "debian" ]]; then
@@ -218,6 +224,32 @@ install_packages() {
       # For macOS and Arch, install all at once
       $install_cmd $packages
     fi
+    # Special installations: kubelogin (all platforms), azure-cli (non-macOS)
+    if [[ "$platform" == "macos" ]]; then
+      log_info "Installing kubelogin via brew tap..."
+      brew install Azure/kubelogin/kubelogin || log_warning "Failed to install kubelogin, continuing..."
+    else
+      # azure-cli on Linux
+      log_info "Installing azure-cli via curl..."
+      curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash || log_warning "Failed to install azure-cli, continuing..."
+
+      # kubelogin on Linux
+      log_info "Installing kubelogin from GitHub releases..."
+      local kubelogin_url=$(curl -s https://api.github.com/repos/Azure/kubelogin/releases/latest \
+        | grep "browser_download_url.*linux-amd64.zip" \
+        | head -1 \
+        | cut -d '"' -f 4)
+      if [[ -n "$kubelogin_url" ]]; then
+        local tmp_dir=$(mktemp -d /tmp/kubelogin-XXXXX)
+        curl -sL "$kubelogin_url" -o "$tmp_dir/kubelogin.zip" \
+          && unzip -q "$tmp_dir/kubelogin.zip" -d "$tmp_dir" \
+          && sudo install -m 755 "$tmp_dir/bin/linux_amd64/kubelogin" /usr/local/bin/kubelogin \
+          && rm -rf "$tmp_dir"
+      else
+        log_warning "Could not find kubelogin release, skipping"
+      fi
+    fi
+
     log_success "Package installation complete"
   fi
 }
