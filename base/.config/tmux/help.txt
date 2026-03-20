@@ -41,6 +41,7 @@ C-a Enter      Bottom terminal pane (15 lines)
 C-a M-Enter    Scratch session popup (75% popup)
 C-a C-n        Notes popup (85% popup)
 C-a C-e        Editor - switch to/create persistent nvim window
+C-a E          Editor popup - nvim in 90% popup
 C-a C-o        Open current directory in OS file explorer
 C-a ?          This help menu
 
