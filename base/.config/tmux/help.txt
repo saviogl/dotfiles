@@ -8,10 +8,6 @@ C-a h          Select pane left
 C-a j          Select pane down
 C-a k          Select pane up
 C-a l          Select pane right
-M-Left         Select pane left (no prefix)
-M-Right        Select pane right (no prefix)
-M-Up           Select pane up (no prefix)
-M-Down         Select pane down (no prefix)
 C-h/j/k/l      Vim-aware pane navigation (no prefix)
 
 PANE RESIZING
