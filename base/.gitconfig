@@ -24,6 +24,7 @@
 [push]
 	useForceIfIncludes = true
 	autoSetupRemote = true
+	default = current
 
 [filter "lfs"]
 	clean = git-lfs clean -- %f
