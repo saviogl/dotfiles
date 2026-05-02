@@ -37,6 +37,8 @@ POPUPS & TOOLS
 --------------
 C-a g          Lazygit (90% popup)
 C-a G          GitHub Dashboard - gh dash (90% popup)
+C-a a          Claude YOLO popup (current dir)
+C-a A          Claude YOLO popup (pick from zoxide frecent dirs)
 C-a Enter      Bottom terminal pane (15 lines)
 C-a M-Enter    Scratch session popup (75% popup)
 C-a C-n        Notes popup (85% popup)
