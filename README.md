@@ -155,7 +155,7 @@ Bootstrap terminal utilities for your platform:
 ..          # cd ..
 ...         # cd ../..
 ....        # cd ../../..
-src         # cd ~/src
+src         # cd ~/code
 dots        # cd ~/.config/dots
 c           # clear
 fkill       # Interactive process killer with fzf
@@ -320,7 +320,7 @@ Consistent **Catppuccin Mocha** theme across all applications:
 **Starting a new project:**
 
 ```bash
-cd ~/src
+cd ~/code
 wt feature-branch    # Creates worktree + tmux session
 # Work in isolated environment with dedicated tmux session
 ```
@@ -330,7 +330,7 @@ wt feature-branch    # Creates worktree + tmux session
 ```bash
 tmproj              # Interactive project picker with fzf
 tmdots              # Quick access to dotfiles
-src                 # Jump to ~/src directory
+src                 # Jump to ~/code directory
 ```
 
 **GitHub workflow:**

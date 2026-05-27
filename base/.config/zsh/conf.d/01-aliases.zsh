@@ -148,10 +148,10 @@ alias tmls='tmux list-sessions'
 alias tmat='tmux attach -t'
 # Project tmux session management
 tmproj() {
-  local proj_dir="$HOME/src"
+  local proj_dir="$HOME/code"
   local selected_proj
-  
-  # Use fzf to select project from ~/src directory
+
+  # Use fzf to select project from ~/code directory
   selected_proj=$(ls "$proj_dir" | fzf --prompt="Select project: " --height=40%)
   
   if [[ -z "$selected_proj" ]]; then
@@ -196,7 +196,7 @@ alias be='bundle exec'
 export DOTFILES="~/.config/dots"
 
 alias dots="cd $DOTFILES"
-alias src="cd ~/src"
+alias src="cd ~/code"
 
 # Process management
 alias fkill='kill $(ps aux | fzf | awk "{print \$2}")'

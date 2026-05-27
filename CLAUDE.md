@@ -168,7 +168,7 @@ Always use `./bin/install --simulate` before applying changes to preview symlink
 ### Tmux Session Management
 
 Project sessions are managed via `tmproj` function:
-- Searches `~/src/` for projects
+- Searches `~/code/` for projects
 - Creates/attaches to session named after project directory
 - Handles both inside/outside tmux contexts (switch-client vs attach-session)
 

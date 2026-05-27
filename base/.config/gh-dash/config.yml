@@ -71,7 +71,7 @@ keybindings:
   prs: []
   branches: []
 repoPaths:
-  src/*: ~/src/*
+  src/*: ~/code/*
 theme:
   ui:
     sectionsShowCount: true
