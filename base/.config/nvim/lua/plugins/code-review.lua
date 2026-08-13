@@ -4,6 +4,18 @@ return {
   config = function(_, opts)
     require("code-review").setup(opts)
 
+    -- Copy the whole review out and clear it in one step, so the next batch sent
+    -- to an agent can never carry comments that were already sent
+    vim.keymap.set("n", "<leader>rY", function()
+      local cr = require("code-review")
+      if #require("code-review.state").get_comments() == 0 then
+        vim.notify("No comments to copy", vim.log.levels.WARN)
+        return
+      end
+      cr.copy()
+      cr.clear()
+    end, { desc = "Copy review to clipboard and clear" })
+
     -- <C-CR> doesn't work in most terminals, add alternative submit keys
     vim.api.nvim_create_autocmd("User", {
       pattern = "CodeReviewInputEnter",
