@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+# tmux-pane-switcher - Focus a pane running a given command in a window, or split one side by side
+# Usage: tmux-pane-switcher <window-target> <match-pattern> <command> [working-directory]
+
+set -e
+
+# Check if we're in a tmux session
+if [ -z "$TMUX" ]; then
+  echo "Error: Not in a tmux session" >&2
+  exit 1
+fi
+
+# Check arguments
+if [ $# -lt 3 ]; then
+  echo "Usage: $(basename "$0") <window-target> <match-pattern> <command> [working-directory]" >&2
+  exit 1
+fi
+
+WINDOW="$1"
+PATTERN="$2"
+COMMAND="$3"
+WORK_DIR="${4:-$HOME}"
+
+# Look for a pane in this window already running the command (same process check
+# vim-tmux-navigator uses: any non-suspended process on the pane's tty)
+while read -r pane_id pane_tty; do
+  if ps -o state= -o comm= -t "$pane_tty" 2>/dev/null |
+    grep -iqE "^[^TXZ ]+ +${PATTERN}$"; then
+    tmux select-pane -t "$pane_id"
+    exit 0
+  fi
+done < <(tmux list-panes -t "$WINDOW" -F '#{pane_id} #{pane_tty}')
+
+# Not running yet, split the current pane in half and start it there
+tmux split-window -h -t "$WINDOW" -c "$WORK_DIR" "$COMMAND"

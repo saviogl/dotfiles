@@ -122,7 +122,8 @@ Custom utility scripts are located in `base/.local/bin/` (symlinks to `~/.local/
 - `note-week`, `note-tasks`, `note-task-add`, `note-migrate-tasks`: Task/weekly note management
 
 **Tmux Utilities:**
-- `tmux-window-switcher`: Interactive window switching with fzf
+- `tmux-pane-switcher`: Focus the pane in a window already running a command, or split one side by side (used by `C-a C-e` for nvim)
+- `tmux-window-switcher`: Switch to a window by name, creating it with a command if absent
 - `gb-tmux-setup-default-tabs`: Setup default tmux tab layout
 
 All scripts are executable and automatically available in `$PATH` after running `./bin/install`.
@@ -154,7 +155,7 @@ When adding new config files, check that they don't contain machine-specific pat
 1. **New tool config**: Add to appropriate directory in `base/.config/`
 2. **New shell functionality**: Create new numbered file in `base/.config/zsh/conf.d/`
 3. **New Neovim plugin**: Create file in `base/.config/nvim/lua/plugins/` returning LazyVim spec
-4. **New user script**: Add to `base/.local/bin/` (symlinks to `~/.local/bin/`). Make executable with `chmod +x`
+4. **New user script**: Add to `base/.local/bin/` (symlinks to `~/.local/bin/`). Make executable with `chmod +x`, then stage it with `git add -f` — `.gitignore` has `*.local`, which matches `base/.local`, so new files there are invisible to `git status` and `git add -A`
 5. **New platform-specific config**: Add to `macos/` or `linux/` mirroring home path structure
 
 ### Maintaining Tmux Help File
